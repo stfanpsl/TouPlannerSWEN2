@@ -29,8 +29,8 @@
         <Button Content="Description" HorizontalAlignment="Left" Margin="505,160,0,0" VerticalAlignment="Top" Background="#FF64BBAD" Width="280" Height="25" FontFamily="Arial"/>
         <TextBlock HorizontalAlignment="Left" Margin="295,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center"/>
         <TextBox HorizontalAlignment="Left" Margin="205,190,0,0" TextWrapping="Wrap" Text="The Tour..." VerticalAlignment="Top" Width="580" BorderBrush="#FF616161" Height="90"/>
-        <DataGrid d:ItemsSource="{d:SampleData ItemCount=5}" Margin="200,290,10,10"/>
-        <ListView d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,160,610,10">
+        <DataGrid d:ItemsSource="{d:SampleData ItemCount=5}" Margin="200,290,10,10" SelectionChanged="DataGrid_SelectionChanged_1"/>
+        <ListView d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,160,610,10" SelectionChanged="ListView_SelectionChanged">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
