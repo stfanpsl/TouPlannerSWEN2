@@ -5,10 +5,11 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using TourPlannerSemesterProjekt.ViewModels;
 
 namespace TourPlannerSemesterProjekt
 {
-    class MainWindowViewModel : INotifyPropertyChanged
+    class MainWindowViewModel : BaseViewModel
     {
         public MainWindowViewModel()
         {
@@ -56,14 +57,6 @@ namespace TourPlannerSemesterProjekt
 
         public string Fullname => $"{Firstname} {Lastname}";
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        private void RaisePropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            if (!string.IsNullOrEmpty(propertyName))
-            {
-                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
     }
 }
