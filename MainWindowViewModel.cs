@@ -19,7 +19,9 @@ namespace TourPlannerSemesterProjekt
         //public string firstname { get; set; }
 
         string firstname;
-        public string Firstname{ get => firstname;
+        public string Firstname
+        {
+            get => firstname;
             set
             {
                 if (firstname != value)
