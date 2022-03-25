@@ -34,5 +34,11 @@ namespace TourPlannerSemesterProjekt
         {
 
         }
+
+        public void CRUDTours(object sender, RoutedEventArgs e)
+        {
+            TourAdministration tourAdministration = new TourAdministration();
+            tourAdministration.Show();
+        }
     }
 }

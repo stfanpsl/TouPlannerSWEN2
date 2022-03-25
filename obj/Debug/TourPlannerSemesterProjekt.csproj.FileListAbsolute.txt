@@ -15,3 +15,5 @@ C:\Users\Anwender\Documents\Visual Studio 2019\Projects\TourPlannerSemesterProje
 C:\Users\Anwender\Documents\Visual Studio 2019\Projects\TourPlannerSemesterProjekt\obj\Debug\TourPlannerSemesterProjekt.pdb
 C:\Users\Anwender\Documents\Visual Studio 2019\Projects\TourPlannerSemesterProjekt\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\Users\Anwender\Documents\Visual Studio 2019\Projects\TourPlannerSemesterProjekt\obj\Debug\TourPlannerSemesterProjekt.csproj.SuggestedBindingRedirects.cache
+C:\Users\Anwender\Documents\Visual Studio 2019\Projects\TourPlannerSemesterProjekt\obj\Debug\TourAdministration.g.cs
+C:\Users\Anwender\Documents\Visual Studio 2019\Projects\TourPlannerSemesterProjekt\obj\Debug\TourAdministration.baml

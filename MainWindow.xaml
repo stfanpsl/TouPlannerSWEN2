@@ -35,7 +35,7 @@
         <Button Grid.Column ="3" Grid.Row="1" Content="Help" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
         <TextBox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" TextWrapping="Wrap" Text="{Binding Firstname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="30"/>
         <TextBlock Grid.Column="0" Grid.Row="3">Tours</TextBlock>
-        <Button Content="+" Grid.Column="0" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center" Width="56" Background="DodgerBlue" BorderBrush="DarkBlue"/>
+        <Button Click="CRUDTours" Content="+" Grid.Column="0" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center" Width="56" Background="DodgerBlue" BorderBrush="DarkBlue"/>
         <Button Content="-" Grid.Column="0" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Right" Width="56" Background="DodgerBlue" BorderBrush="DarkBlue"/>
         <TextBox Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="3" TextWrapping="Wrap" Text="Title" Height="30"/>
         <Button Grid.Column ="1" Grid.Row="4" Grid.ColumnSpan="2" Content="Route" HorizontalAlignment="Center" Background="DodgerBlue" BorderBrush="DarkBlue" Width="180" Height="30" FontFamily="Arial"/>

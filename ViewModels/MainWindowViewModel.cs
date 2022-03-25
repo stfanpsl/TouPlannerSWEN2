@@ -5,16 +5,22 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using TourPlannerSemesterProjekt.ViewModels;
+using System.Web;
+
 
 namespace TourPlannerSemesterProjekt
 {
     class MainWindowViewModel : BaseViewModel
     {
+
+
+
         public MainWindowViewModel()
         {
-            Firstname = "Bester";
-            Lastname = "Mensch";
+            Firstname = "Hallo";
+            Lastname = "Welt!";
         }
 
         //public string firstname { get; set; }
@@ -56,6 +62,7 @@ namespace TourPlannerSemesterProjekt
         //public string lastname { get; set; }
 
         public string Fullname => $"{Firstname} {Lastname}";
+
 
 
     }
