@@ -14,5 +14,9 @@ namespace TourPlannerSemesterProjekt.DataAccess
 
         public void AddNewTour(TourObjekt newtour);
 
+        public void DeleteTour(TourObjekt newtour);
+
+        public void EditTour(TourObjekt newtour);
+
     }
 }

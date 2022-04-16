@@ -21,6 +21,11 @@ namespace TourPlannerSemesterProjekt.DataAccess
 
         private const string SQL_INSERT_TOUR = "INSERT INTO tour (\"name\", \"tourDescription\", \"toAddress\", \"fromAddress\", \"transportType\", \"routeInformation\", \"tourDistance\", \"estimatedArrTime\") VALUES (@nname, @ntourDescription, @ntoAddress, @nfromAddress, @ntransportType, @nrouteInformation, @ntourDistance, @nestimatedArrTime)";
 
+        private const string SQL_UPDATE_TOUR = "UPDATE tour SET \"name\" = @nname, \"tourDescription\" = @ntourDescription, \"toAddress\" = @ntoAddress, \"fromAddress\" = @nfromAddress, \"transportType\" = @ntransportType, \"routeInformation\" = @nrouteInformation, \"tourDistance\" =@ntourDistance , \"estimatedArrTime\" = @nestimatedArrTime WHERE id = @id";
+
+        private const string SQL_DELETE_TOUR = "DELETE FROM tour WHERE \"id\" = @id";
+
+
         private static Lazy<TourPlannerDBAccess> _instance; // Singleton pattern
 
         public static TourPlannerDBAccess GetInstance()
@@ -95,6 +100,70 @@ namespace TourPlannerSemesterProjekt.DataAccess
                 insertCommand.Prepare();
 
                 insertCommand.ExecuteNonQuery();
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new NpgsqlException("Error in database occurred.", ex);
+            }
+
+            conn.Close();
+        }
+
+        public void EditTour(TourObjekt newtour)
+        {
+            //var Tour = new TourObjekt();
+
+            var conn = CreateOpenConnection();
+
+            using var updateCommand = new NpgsqlCommand(SQL_UPDATE_TOUR, conn);
+
+
+            try
+            {
+                //name, tourDescription, to, from, transportType, routeInformation, tourDistance, estimatedArrTime
+                updateCommand.Parameters.AddWithValue("nname", newtour.name);
+                updateCommand.Parameters.AddWithValue("ntourDescription", newtour.tourDescription);
+                updateCommand.Parameters.AddWithValue("ntoAddress", newtour.to);
+                updateCommand.Parameters.AddWithValue("nfromAddress", newtour.from);
+                updateCommand.Parameters.AddWithValue("ntransportType", newtour.transportType);
+                updateCommand.Parameters.AddWithValue("nrouteInformation", newtour.routeInformation);
+                updateCommand.Parameters.AddWithValue("ntourDistance", newtour.tourDistance);
+                updateCommand.Parameters.AddWithValue("nestimatedArrTime", newtour.estimatedTime);
+
+                updateCommand.Parameters.AddWithValue("id", newtour.id);
+
+                updateCommand.Prepare();
+
+                updateCommand.ExecuteNonQuery();
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new NpgsqlException("Error in database occurred.", ex);
+            }
+
+            conn.Close();
+        }
+
+
+        public void DeleteTour(TourObjekt newtour)
+        {
+            //var Tour = new TourObjekt();
+
+            var conn = CreateOpenConnection();
+
+            using var removeCommand = new NpgsqlCommand(SQL_DELETE_TOUR, conn);
+
+
+            try
+            {
+                //name, tourDescription, to, from, transportType, routeInformation, tourDistance, estimatedArrTime
+                removeCommand.Parameters.AddWithValue("id", newtour.id);
+
+                removeCommand.Prepare();
+
+                removeCommand.ExecuteNonQuery();
             }
             catch (NpgsqlException ex)
             {

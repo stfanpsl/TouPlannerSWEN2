@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TourPlannerSemesterProjekt.ViewModels;
+using TourPlannerSemesterProjekt.Models;
 
 namespace TourPlannerSemesterProjekt
 {
@@ -19,9 +21,16 @@ namespace TourPlannerSemesterProjekt
     /// </summary>
     public partial class TourAdministration : Window
     {
-        public TourAdministration()
+        public TourAdministration(MainWindowViewModel mainView)
         {
             InitializeComponent();
+            this.DataContext = new TourAdministrationViewModel(this, mainView);
+        }
+
+        public TourAdministration(MainWindowViewModel mainView, TourObjekt tour)
+        {
+            InitializeComponent();
+            this.DataContext = new TourAdministrationViewModel(this, mainView, tour);
         }
 
         public void CloseWindow(object sender, RoutedEventArgs e)

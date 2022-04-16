@@ -12,21 +12,91 @@ using TourPlannerSemesterProjekt.Models;
 using TourPlannerSemesterProjekt.DataAccess;
 using System.Collections.ObjectModel;
 using TourPlannerSemesterProjekt.Business.Services;
+using System.Windows.Input;
 
 namespace TourPlannerSemesterProjekt
 {
-    class MainWindowViewModel : BaseViewModel
+    public class MainWindowViewModel : BaseViewModel
     {
 
-        public ObservableCollection<TourObjekt> TourItems { get; set; }
+        private ObservableCollection<TourObjekt> _tourItems;
+        public ObservableCollection<TourObjekt> TourItems
+        {
+            get => _tourItems;
+            set
+            {
+                if (_tourItems != value)
+                {
+                    _tourItems = value;
+                    RaisePropertyChanged(nameof(TourItems));
+                }
+            }
+        }
 
         private ITourPlannerService _tourservice;
+
+        private ICommand _addCommand;
+        public ICommand AddCommand => _addCommand ??= new RelayCommand(AddTour);
+
+        private ICommand _deleteCommand;
+        public ICommand DeleteCommand => _deleteCommand ??= new RelayCommand(DeleteTour);
+
+        private ICommand _editCommand;
+        public ICommand EditCommand => _editCommand ??= new RelayCommand(UpdateTour);
+
+
+        private TourObjekt _currentTour;
+
+
+        public TourObjekt CurrentTour
+        {
+            get => _currentTour;
+            set
+            {
+                if (_currentTour != value)
+                {
+                    _currentTour = value;
+                    RaisePropertyChanged(nameof(CurrentTour));
+                }
+            }
+        }
 
         public MainWindowViewModel()
         {
             var repository = TourPlannerDBAccess.GetInstance();
             _tourservice = new TourPlannerService(repository);
+
+            GetAllTours();
+        }
+
+        public void GetAllTours()
+        {
             TourItems = new ObservableCollection<TourObjekt>(_tourservice.GetAllTours());
+        }
+
+
+        private void AddTour(object commandParameter)
+        {
+            TourAdministration addTourWindow = new TourAdministration(this);
+            addTourWindow.Show();
+        }
+
+        private void UpdateTour(object commandParameter)
+        {
+            TourAdministration addTourWindow = new TourAdministration(this, CurrentTour);
+            addTourWindow.Show();
+        }
+
+        private void DeleteTour(object commandParameter)
+        {
+
+            if (CurrentTour != null)
+            {
+                _tourservice.DeleteTour(CurrentTour);
+                TourItems.Remove(CurrentTour);
+
+                CurrentTour = null;
+            }
         }
 
     }

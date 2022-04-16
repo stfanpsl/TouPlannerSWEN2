@@ -5,10 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TourPlannerSemesterProjekt.ViewModels"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=local:TourAdministrationViewModel}"
         Title="TourAdministration" Height="450" Width="800">
-    <Window.DataContext>
-        <local:TourAdministrationViewModel/>
-    </Window.DataContext>
     <Grid ShowGridLines="False">
 
         <Grid.ColumnDefinitions>
@@ -41,7 +39,7 @@
         <TextBox Margin="5" Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="2" Text="{Binding CurrentItem.tourDistance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="600" TextWrapping="Wrap" ></TextBox>
         <DatePicker Margin="5" Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="2" SelectedDate="{Binding CurrentItem.estimatedTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="600"></DatePicker>
 
-        <Button Command="{Binding CreateCommand}" Margin="5" Grid.Column ="1" Grid.Row="9" Grid.ColumnSpan="1" Content="Save" HorizontalAlignment="Center" Background="DodgerBlue" BorderBrush="DarkBlue" Width="180" Height="30" FontFamily="Arial"/>
+        <Button Command="{Binding SaveCommand}" Margin="5" Grid.Column ="1" Grid.Row="9" Grid.ColumnSpan="1" Content="Save" HorizontalAlignment="Center" Background="DodgerBlue" BorderBrush="DarkBlue" Width="180" Height="30" FontFamily="Arial"/>
         <Button Click="CloseWindow" Margin="5" Grid.Column ="2" Grid.Row="9" Grid.ColumnSpan="1" Content="Cancel" HorizontalAlignment="Center" Background="DodgerBlue" BorderBrush="DarkBlue" Width="180" Height="30" FontFamily="Arial"/>
 
 

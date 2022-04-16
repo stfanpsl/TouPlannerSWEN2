@@ -47,5 +47,32 @@ namespace TourPlannerSemesterProjekt.Business.Services
             }
         }
 
+        public void EditTour(TourObjekt newtour)
+        {
+            try
+            {
+                _dBAccess.EditTour(newtour);
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new NpgsqlException("Error in database occurred.", ex);
+            }
+        }
+
+
+        public void DeleteTour(TourObjekt tour)
+        {
+            try
+            {
+                _dBAccess.DeleteTour(tour);
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new NpgsqlException("Error in database occurred.", ex);
+            }
+        }
+
     }
 }
