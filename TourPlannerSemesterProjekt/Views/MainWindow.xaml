@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TourPlannerSemesterProjekt"
         mc:Ignorable="d"
-        Title="TourPlanner" Height="450" Width="800">
+        Title="TourPlanner" Height="650" Width="800">
 
     <Window.DataContext>
         <local:MainWindowViewModel/>
@@ -38,9 +38,8 @@
         <Button Command="{Binding AddCommand}"  Content="+" Grid.Column="0" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center" Width="56" Background="DodgerBlue" BorderBrush="DarkBlue"/>
         <Button Command="{Binding DeleteCommand}" Content="-" Grid.Column="0" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Right" Width="56" Background="DodgerBlue" BorderBrush="DarkBlue"/>
         <TextBox Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="3" TextWrapping="Wrap" Text="{Binding SelectedItem.name, ElementName=TourListBox}" Height="30"/>
-        <Button Grid.Column ="1" Grid.Row="4" Grid.ColumnSpan="2" Content="Route" HorizontalAlignment="Center" Background="DodgerBlue" BorderBrush="DarkBlue" Width="180" Height="30" FontFamily="Arial"/>
-        <Button Grid.Column ="2" Grid.Row="4" Grid.ColumnSpan="2" Content="Description" HorizontalAlignment="Center" Background="DodgerBlue" BorderBrush="DarkBlue" Width="180" Height="30" FontFamily="Arial"/>
-        <TextBox Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" Text="{Binding SelectedItem.tourDescription, ElementName=TourListBox}" TextWrapping="Wrap" Background="White"></TextBox>
+        <TextBox Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="1" Text="{Binding SelectedItem.tourDescription, ElementName=TourListBox}" TextWrapping="Wrap" Background="White"></TextBox>
+        <Image Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" Width="auto" Height="auto" Source="{Binding SelectedItem.imagePath, ElementName=TourListBox}"></Image>
         <!--<ListBox Grid.Row="4" Grid.RowSpan="3" d:ItemsSource="{Binding _items}"/>-->
         <ListBox Grid.Row="4" Grid.RowSpan="3" x:Name="TourListBox" 
                  ItemsSource="{Binding TourItems, Mode=TwoWay}" 

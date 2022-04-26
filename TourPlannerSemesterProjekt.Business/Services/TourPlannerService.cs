@@ -36,6 +36,13 @@ namespace TourPlannerSemesterProjekt.Business.Services
 
         public void AddNewTour(TourObjekt newtour)
         {
+            MapQuestService _mapQuestService = new MapQuestService(newtour.from, newtour.to);
+            string imagePath = _mapQuestService.LoadImage();
+            double tourDistance = _mapQuestService.GetRouteDistance();
+
+            newtour.tourDistance = tourDistance;
+            newtour.imagePath = imagePath;
+
             try
             {
                 _dBAccess.AddNewTour(newtour);

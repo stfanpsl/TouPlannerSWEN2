@@ -19,7 +19,7 @@ namespace TourPlannerSemesterProjekt.ViewModels
         private Window _window;
         private MainWindowViewModel _mainView;
 
-        private TourObjekt currentItem = new TourObjekt("New Tour", "Tour Description", "To", "From", "Transport-type", "Route Information", 0, DateTime.Today);
+        private TourObjekt currentItem = new TourObjekt("New Tour", "Tour Description", "To", "From", "Transport-type", "Route Information");
         public TourObjekt CurrentItem
         {
             get { return currentItem; }

@@ -25,6 +25,8 @@ namespace TourPlannerSemesterProjekt.Models
         public string transportType { get; set; }
         public string routeInformation { get; set; }
         public double tourDistance { get; set; }
+
+        public string imagePath { get; set; }
         public DateTime estimatedTime { get; set; }
 
         public TourObjekt(int id,
@@ -35,7 +37,8 @@ namespace TourPlannerSemesterProjekt.Models
                           string transportType,
                           string routeInformation,
                           double tourDistance,
-                          DateTime estimatedTime)
+                          DateTime estimatedTime,
+                          string imagePath)
         {
             this.name = name;
             this.tourDescription = tourDescription;
@@ -46,6 +49,7 @@ namespace TourPlannerSemesterProjekt.Models
             this.tourDistance = tourDistance;
             this.estimatedTime = estimatedTime;
             this.id = id;
+            this.imagePath = imagePath;
         }
 
         public TourObjekt(string name,
@@ -53,9 +57,7 @@ namespace TourPlannerSemesterProjekt.Models
                           string to,
                           string from,
                           string transportType,
-                          string routeInformation,
-                          double tourDistance,
-                          DateTime estimatedTime)
+                          string routeInformation)
         {
             this.name = name;
             this.tourDescription = tourDescription;
@@ -63,8 +65,6 @@ namespace TourPlannerSemesterProjekt.Models
             this.from = from;
             this.transportType = transportType;
             this.routeInformation = routeInformation;
-            this.tourDistance = tourDistance;
-            this.estimatedTime = estimatedTime;
         }
 
         public TourObjekt()

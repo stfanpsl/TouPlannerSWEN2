@@ -19,7 +19,7 @@ namespace TourPlannerSemesterProjekt.DataAccess
 
         private const string SQL_GET_ALL_TOURS = "SELECT * FROM tour";
 
-        private const string SQL_INSERT_TOUR = "INSERT INTO tour (\"name\", \"tourDescription\", \"toAddress\", \"fromAddress\", \"transportType\", \"routeInformation\", \"tourDistance\", \"estimatedArrTime\") VALUES (@nname, @ntourDescription, @ntoAddress, @nfromAddress, @ntransportType, @nrouteInformation, @ntourDistance, @nestimatedArrTime)";
+        private const string SQL_INSERT_TOUR = "INSERT INTO tour (\"name\", \"tourDescription\", \"toAddress\", \"fromAddress\", \"transportType\", \"routeInformation\", \"tourDistance\", \"estimatedArrTime\", \"filePath\") VALUES (@nname, @ntourDescription, @ntoAddress, @nfromAddress, @ntransportType, @nrouteInformation, @ntourDistance, @nestimatedArrTime, @nfilePath)";
 
         private const string SQL_UPDATE_TOUR = "UPDATE tour SET \"name\" = @nname, \"tourDescription\" = @ntourDescription, \"toAddress\" = @ntoAddress, \"fromAddress\" = @nfromAddress, \"transportType\" = @ntransportType, \"routeInformation\" = @nrouteInformation, \"tourDistance\" =@ntourDistance , \"estimatedArrTime\" = @nestimatedArrTime WHERE id = @id";
 
@@ -60,7 +60,8 @@ namespace TourPlannerSemesterProjekt.DataAccess
                         string routeinformation = reader.GetString(6);
                         double tourdistance = reader.GetDouble(7);
                         DateTime estArrival = reader.GetDateTime(8);
-                        var tour = new TourObjekt(id, name, tourdescription, to, from, transporttype, routeinformation, tourdistance, estArrival);
+                        string filepath = reader.GetString(9);
+                        var tour = new TourObjekt(id, name, tourdescription, to, from, transporttype, routeinformation, tourdistance, estArrival, filepath);
                         Tours.Add(tour);
                     }
                 }
@@ -96,6 +97,7 @@ namespace TourPlannerSemesterProjekt.DataAccess
                 insertCommand.Parameters.AddWithValue("nrouteInformation", newtour.routeInformation);
                 insertCommand.Parameters.AddWithValue("ntourDistance", newtour.tourDistance);
                 insertCommand.Parameters.AddWithValue("nestimatedArrTime", newtour.estimatedTime);
+                insertCommand.Parameters.AddWithValue("nfilePath", newtour.imagePath);
 
                 insertCommand.Prepare();
 
