@@ -25,21 +25,29 @@ namespace TourPlannerSemesterProjekt.Business.Services
             _client = new HttpClient();
             _apiKey = ConfigurationManager.AppSettings["MapQuestKey"];
             _filePath = ConfigurationManager.AppSettings["ImagePath"];
-            _routeData = SaveRouteInformation(fromLocation, toLocation);
+            _routeData = GetRoute(fromLocation, toLocation);
         }
 
-        private JObject SaveRouteInformation(string fromLocation, string toLocation)
+        private JObject GetRoute(string fromLocation, string toLocation)
         {
-            if (DoesLocationExist(fromLocation) && DoesLocationExist(toLocation))
-            {
-                var url = _baseUrl + "/directions/v2/route?key=" + _apiKey + "&from=" + fromLocation + "&to=" + toLocation + "&unit=k";
-                using (WebClient client = new WebClient())
+                var url = _baseUrl + "/directions/v2/route?key=" 
+                    + _apiKey 
+                    + "&from=" 
+                    + fromLocation 
+                    + "&to=" 
+                    + toLocation 
+                    + "&unit=k";
+
+                HttpClient client = new HttpClient();
+                JObject jSonResponse;
+                using (HttpResponseMessage response = client.GetAsync(url).Result)
                 {
-                    JObject jSonResponse = JObject.Parse(client.DownloadString(url));
+                    using (HttpContent content = response.Content)
+                    {
+                        jSonResponse = JObject.Parse(content.ReadAsStringAsync().Result);
+                    }
                     return jSonResponse;
                 }
-            }
-
             return null;
         }
 
@@ -53,7 +61,7 @@ namespace TourPlannerSemesterProjekt.Business.Services
             return -1;
         }
 
-        public string LoadImage()
+        public string GetImage()
         {
             if (_routeData != null)
             {
@@ -73,8 +81,7 @@ namespace TourPlannerSemesterProjekt.Business.Services
                     {
                         using (var image = Image.FromStream(ms))
                         {
-                            var i2 = new Bitmap(image);
-                            i2.Save(fullFilePath, ImageFormat.Jpeg);
+                            image.Save(fullFilePath, ImageFormat.Jpeg);
                         }
                     }
                 }
@@ -82,24 +89,6 @@ namespace TourPlannerSemesterProjekt.Business.Services
             }
             return "";
 
-        }
-
-
-        public bool DoesLocationExist(string location)
-        {
-            var task = Task.Run(() => _client.GetAsync(_baseUrl + "/geocoding/v1/address?key=" + _apiKey + "&location=" + location));
-            task.Wait();
-
-            var stringJsonResponse = task.Result.Content.ReadAsStringAsync().Result;
-
-            JObject jSonResponse = JObject.Parse(stringJsonResponse);
-
-            if (jSonResponse["results"]?[0]?["locations"]?.Count() > 1)
-            {
-                return true;
-            }
-
-            return false;
         }
     }
 }

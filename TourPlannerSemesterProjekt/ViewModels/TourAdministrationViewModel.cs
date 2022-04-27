@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TourPlannerSemesterProjekt.Models;
 using TourPlannerSemesterProjekt.DataAccess;
-using TourPlannerSemesterProjekt.Business.Services;
+using TourPlannerSemesterProjekt.Business;
 using System.Windows.Input;
 using System.Windows;
 
@@ -19,7 +19,7 @@ namespace TourPlannerSemesterProjekt.ViewModels
         private Window _window;
         private MainWindowViewModel _mainView;
 
-        private TourObjekt currentItem = new TourObjekt("New Tour", "Tour Description", "To", "From", "Transport-type", "Route Information");
+        private TourObjekt currentItem = new TourObjekt("New Tour", "Tour Description", "From", "To", "Transport-type", "Route Information");
         public TourObjekt CurrentItem
         {
             get { return currentItem; }
@@ -33,7 +33,7 @@ namespace TourPlannerSemesterProjekt.ViewModels
             }
         }
 
-        private ITourPlannerService _tourservice;
+        private ITourPlannerFactory _tourservice;
 
         public ICommand SaveCommand { get; set; }
 
@@ -43,9 +43,7 @@ namespace TourPlannerSemesterProjekt.ViewModels
         {
             _window = window;
             _mainView = mainView;
-
-            var repository = TourPlannerDBAccess.GetInstance();
-            _tourservice = new TourPlannerService(repository);
+            _tourservice = TourPlannerFactory.GetInstance();
 
             //RaisePropertyChanged(nameof(CurrentItem));
 
@@ -62,8 +60,7 @@ namespace TourPlannerSemesterProjekt.ViewModels
 
             currentItem = tour;
 
-            var repository = TourPlannerDBAccess.GetInstance();
-            _tourservice = new TourPlannerService(repository);
+            _tourservice = TourPlannerFactory.GetInstance();
 
             //RaisePropertyChanged(nameof(CurrentItem));
 

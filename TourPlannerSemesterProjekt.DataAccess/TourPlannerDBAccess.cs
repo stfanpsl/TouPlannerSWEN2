@@ -13,7 +13,6 @@ namespace TourPlannerSemesterProjekt.DataAccess
 {
     public class TourPlannerDBAccess : ITourPlannerDBAccess
     {
-        //TBD: Add to App.Config
         private string _connectionString = ConfigurationManager.ConnectionStrings["Test"].ConnectionString;
 
 

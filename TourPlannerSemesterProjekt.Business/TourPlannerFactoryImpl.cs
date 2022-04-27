@@ -6,17 +6,19 @@ using System.Threading.Tasks;
 using Npgsql;
 using TourPlannerSemesterProjekt.Models;
 using TourPlannerSemesterProjekt.DataAccess;
+using TourPlannerSemesterProjekt.Business.Services;
 using System.Diagnostics;
 
-namespace TourPlannerSemesterProjekt.Business.Services
+namespace TourPlannerSemesterProjekt.Business
 {
-    public class TourPlannerService : ITourPlannerService
+    public class TourPlannerFactoryImpl : ITourPlannerFactory
     {
         private ITourPlannerDBAccess _dBAccess;
 
-        public TourPlannerService(ITourPlannerDBAccess dbAccess)
+        public TourPlannerFactoryImpl()
         {
-            _dBAccess = dbAccess;
+            var repository = TourPlannerDBAccess.GetInstance();
+            _dBAccess = repository;
         }
 
         public List<TourObjekt> GetAllTours()
@@ -37,7 +39,7 @@ namespace TourPlannerSemesterProjekt.Business.Services
         public void AddNewTour(TourObjekt newtour)
         {
             MapQuestService _mapQuestService = new MapQuestService(newtour.from, newtour.to);
-            string imagePath = _mapQuestService.LoadImage();
+            string imagePath = _mapQuestService.GetImage();
             double tourDistance = _mapQuestService.GetRouteDistance();
 
             newtour.tourDistance = tourDistance;

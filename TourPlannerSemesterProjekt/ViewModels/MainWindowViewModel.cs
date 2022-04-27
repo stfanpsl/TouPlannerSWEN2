@@ -11,7 +11,7 @@ using System.Web;
 using TourPlannerSemesterProjekt.Models;
 using TourPlannerSemesterProjekt.DataAccess;
 using System.Collections.ObjectModel;
-using TourPlannerSemesterProjekt.Business.Services;
+using TourPlannerSemesterProjekt.Business;
 using System.Windows.Input;
 
 namespace TourPlannerSemesterProjekt
@@ -33,7 +33,7 @@ namespace TourPlannerSemesterProjekt
             }
         }
 
-        private ITourPlannerService _tourservice;
+        private ITourPlannerFactory _tourservice;
 
         private ICommand _addCommand;
         public ICommand AddCommand => _addCommand ??= new RelayCommand(AddTour);
@@ -63,8 +63,7 @@ namespace TourPlannerSemesterProjekt
 
         public MainWindowViewModel()
         {
-            var repository = TourPlannerDBAccess.GetInstance();
-            _tourservice = new TourPlannerService(repository);
+            _tourservice = TourPlannerFactory.GetInstance();
 
             GetAllTours();
         }

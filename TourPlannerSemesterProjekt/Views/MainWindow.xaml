@@ -37,8 +37,13 @@
         <TextBlock Grid.Column="0" Grid.Row="3">Tours</TextBlock>
         <Button Command="{Binding AddCommand}"  Content="+" Grid.Column="0" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center" Width="56" Background="DodgerBlue" BorderBrush="DarkBlue"/>
         <Button Command="{Binding DeleteCommand}" Content="-" Grid.Column="0" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Right" Width="56" Background="DodgerBlue" BorderBrush="DarkBlue"/>
-        <TextBox Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="3" TextWrapping="Wrap" Text="{Binding SelectedItem.name, ElementName=TourListBox}" Height="30"/>
-        <TextBox Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="1" Text="{Binding SelectedItem.tourDescription, ElementName=TourListBox}" TextWrapping="Wrap" Background="White"></TextBox>
+        <Label Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="1" Content="{Binding SelectedItem.name, ElementName=TourListBox}" Height="30"/>
+        <StackPanel Margin="5" Orientation="Vertical" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="1">
+            <TextBlock Margin="5" Text="{Binding SelectedItem.tourDescription, StringFormat='Description: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
+            <TextBlock Margin="5" Text="{Binding SelectedItem.from, StringFormat='Start: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
+            <TextBlock Margin="5" Text="{Binding SelectedItem.to, StringFormat='Destination: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
+            <TextBlock Margin="5" Text="{Binding SelectedItem.tourDistance, StringFormat='Distance: {0} km', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
+        </StackPanel>
         <Image Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" Width="auto" Height="auto" Source="{Binding SelectedItem.imagePath, ElementName=TourListBox}"></Image>
         <!--<ListBox Grid.Row="4" Grid.RowSpan="3" d:ItemsSource="{Binding _items}"/>-->
         <ListBox Grid.Row="4" Grid.RowSpan="3" x:Name="TourListBox" 

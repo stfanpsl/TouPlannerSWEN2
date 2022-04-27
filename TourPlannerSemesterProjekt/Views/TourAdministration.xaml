@@ -30,8 +30,8 @@
         <Label Grid.Column="0" Grid.Row="0" Background="LightBlue"  Grid.ColumnSpan="4">Tour Planner</Label>
         <TextBox Margin="5" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding CurrentItem.name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="600" TextWrapping="Wrap"></TextBox>
         <TextBox Margin="5" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding CurrentItem.tourDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
-        <TextBox Margin="5" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding CurrentItem.to, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="600" TextWrapping="Wrap" ></TextBox>
-        <TextBox Margin="5" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Text="{Binding CurrentItem.from, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="600" TextWrapping="Wrap" ></TextBox>
+        <TextBox Margin="5" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding CurrentItem.from, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="600" TextWrapping="Wrap" ></TextBox>
+        <TextBox Margin="5" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Text="{Binding CurrentItem.to, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="600" TextWrapping="Wrap" ></TextBox>
         <TextBox Margin="5" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" Text="{Binding CurrentItem.transportType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="600" TextWrapping="Wrap" ></TextBox>
         <TextBox Margin="5" Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2" Text="{Binding CurrentItem.routeInformation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="600" TextWrapping="Wrap" ></TextBox>
         <Button Command="{Binding SaveCommand}" Margin="5" Grid.Column ="1" Grid.Row="9" Grid.ColumnSpan="1" Content="Save" HorizontalAlignment="Center" Background="DodgerBlue" BorderBrush="DarkBlue" Width="180" Height="30" FontFamily="Arial"/>
