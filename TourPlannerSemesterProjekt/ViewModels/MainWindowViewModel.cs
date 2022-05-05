@@ -14,7 +14,7 @@ using System.Collections.ObjectModel;
 using TourPlannerSemesterProjekt.Business;
 using System.Windows.Input;
 
-namespace TourPlannerSemesterProjekt
+namespace TourPlannerSemesterProjekt.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {

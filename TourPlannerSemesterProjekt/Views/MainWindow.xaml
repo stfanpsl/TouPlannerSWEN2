@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TourPlannerSemesterProjekt"
+        xmlns:local="clr-namespace:TourPlannerSemesterProjekt.ViewModels"
         mc:Ignorable="d"
         Title="TourPlanner" Height="650" Width="800">
 
@@ -58,7 +58,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <DataGrid Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="3" d:ItemsSource="{d:SampleData ItemCount=6}"/>
-        <Image Grid.Column="3" Grid.Row="2" Source="/SearchIcon.png" Height="25" Width="25" HorizontalAlignment="Left"></Image>
+        <Image Grid.Column="3" Grid.Row="2" Source="/img/SearchIcon.png" Height="25" Width="25" HorizontalAlignment="Left"></Image>
     </Grid>
 
 

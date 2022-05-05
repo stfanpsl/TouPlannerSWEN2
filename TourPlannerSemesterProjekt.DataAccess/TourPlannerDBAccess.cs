@@ -49,7 +49,6 @@ namespace TourPlannerSemesterProjekt.DataAccess
                 {
                     while (reader.Read())
                     {
-                        
                         var id = reader.GetInt32(0);
                         string name = reader.GetString(1);
                         string tourdescription = reader.GetString(2);

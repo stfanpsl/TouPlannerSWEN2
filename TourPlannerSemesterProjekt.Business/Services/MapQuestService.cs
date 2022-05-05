@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using TourPlannerSemesterProjekt.Logging;
 
 namespace TourPlannerSemesterProjekt.Business.Services
 {
@@ -18,6 +19,9 @@ namespace TourPlannerSemesterProjekt.Business.Services
         private readonly string _apiKey;
         private readonly string _filePath;
         private JObject _routeData;
+
+        private static ILoggerWrapper logger = LoggerFactory.GetLogger();
+
 
         public MapQuestService(string fromLocation, string toLocation)
         {
@@ -30,12 +34,14 @@ namespace TourPlannerSemesterProjekt.Business.Services
 
         private JObject GetRoute(string fromLocation, string toLocation)
         {
-                var url = _baseUrl + "/directions/v2/route?key=" 
+            var fromLocationFormatted = fromLocation.Replace(" ", "%");
+            var toLocationFormatted = toLocation.Replace(" ", "%");
+            var url = _baseUrl + "/directions/v2/route?key=" 
                     + _apiKey 
                     + "&from=" 
-                    + fromLocation 
+                    + fromLocationFormatted
                     + "&to=" 
-                    + toLocation 
+                    + toLocationFormatted
                     + "&unit=k";
 
                 HttpClient client = new HttpClient();
@@ -76,14 +82,23 @@ namespace TourPlannerSemesterProjekt.Business.Services
                 var fullFilePath = _filePath + fileName;
                 using (WebClient client = new WebClient())
                 {
-                    var data = client.DownloadData(url);
-                    using (var ms = new MemoryStream(data))
+                    try
                     {
-                        using (var image = Image.FromStream(ms))
+                        var data = client.DownloadData(url);
+                        using (var ms = new MemoryStream(data))
                         {
-                            image.Save(fullFilePath, ImageFormat.Jpeg);
+                            using (var image = Image.FromStream(ms))
+                            {
+                                image.Save(fullFilePath, ImageFormat.Jpeg);
+                            }
                         }
                     }
+                    catch (System.Net.WebException ex)
+                    {
+                        logger.Error("Route does not exist!!!");
+                        fullFilePath = "/img/placeholder.png";
+                    }
+
                 }
                 return fullFilePath;
             }

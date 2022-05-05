@@ -8,17 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="SearchIcon.png" />
+    <None Remove="img\placeholder.png" />
+    <None Remove="img\SearchIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TourPlannerSemesterProjekt.Business\TourPlannerSemesterProjekt.Business.csproj" />
     <ProjectReference Include="..\TourPlannerSemesterProjekt.DataAccess\TourPlannerSemesterProjekt.DataAccess.csproj" />
     <ProjectReference Include="..\TourPlannerSemesterProjekt.Models\TourPlannerSemesterProjekt.Models.csproj" />
+	<ProjectReference Include="..\TourPlannerSemesterProjekt.Logging\TourPlannerSemesterProjekt.Logging.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="SearchIcon.png" />
+    <Resource Include="img\placeholder.png" />
+    <Resource Include="img\SearchIcon.png" />
   </ItemGroup>
 
   <ItemGroup>

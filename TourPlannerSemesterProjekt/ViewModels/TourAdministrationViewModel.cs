@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TourPlannerSemesterProjekt.Models;
 using TourPlannerSemesterProjekt.DataAccess;
 using TourPlannerSemesterProjekt.Business;
+using TourPlannerSemesterProjekt.Logging;
 using System.Windows.Input;
 using System.Windows;
 
@@ -15,6 +16,7 @@ namespace TourPlannerSemesterProjekt.ViewModels
 {
     public class TourAdministrationViewModel : BaseViewModel
     {
+        private static ILoggerWrapper logger = LoggerFactory.GetLogger();
 
         private Window _window;
         private MainWindowViewModel _mainView;
@@ -71,10 +73,13 @@ namespace TourPlannerSemesterProjekt.ViewModels
 
         private void InsertTour(TourObjekt newTour)
         {
+            logger.Debug("New Tour: '" + newTour.name + "' created.");
             _tourservice.AddNewTour(newTour);
             //_mainView.TourItems.Add(newTour);
             _mainView.GetAllTours();
             _window.Close();
+
+            
         }
 
         private void UpdateTour(TourObjekt newTour)
