@@ -83,5 +83,10 @@ namespace TourPlannerSemesterProjekt.Business
             }
         }
 
+        public void GeneratePdf(TourObjekt newtour)
+        {
+            PDFGeneratorService _pdfGeneratorService = new PDFGeneratorService();
+            _pdfGeneratorService.printPdf(newtour);
+        }
     }
 }

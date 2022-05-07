@@ -44,6 +44,9 @@ namespace TourPlannerSemesterProjekt.ViewModels
         private ICommand _editCommand;
         public ICommand EditCommand => _editCommand ??= new RelayCommand(UpdateTour);
 
+        private ICommand _pdfCommand;
+        public ICommand PDFCommand => _pdfCommand ??= new RelayCommand(PrintPdf);
+
 
         private TourObjekt _currentTour;
 
@@ -84,6 +87,13 @@ namespace TourPlannerSemesterProjekt.ViewModels
         {
             TourAdministration addTourWindow = new TourAdministration(this, CurrentTour);
             addTourWindow.Show();
+        }
+
+
+        private void PrintPdf(object commandParameter)
+        {
+            _tourservice.GeneratePdf(CurrentTour);
+            MessageBox.Show("Your report can be found in the root folder of your installation.", "PDF Generation done");
         }
 
         private void DeleteTour(object commandParameter)

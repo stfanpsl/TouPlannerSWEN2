@@ -29,7 +29,7 @@
         </Grid.RowDefinitions>
 
         <Label Grid.Column="0" Grid.Row="0" Background="LightBlue"  Grid.ColumnSpan="4">Tour - Planner</Label>
-        <Button Grid.Column ="0" Grid.Row="1" Content="File" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
+        <Button Command="{Binding PDFCommand}" Grid.Column ="0" Grid.Row="1" Content="File" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
         <Button Command="{Binding EditCommand}" Grid.Column ="1" Grid.Row="1" Content="Edit" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
         <Button Grid.Column ="2" Grid.Row="1" Content="Options" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
         <Button Grid.Column ="3" Grid.Row="1" Content="Help" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>

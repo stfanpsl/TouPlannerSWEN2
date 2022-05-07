@@ -12,5 +12,7 @@ namespace TourPlannerSemesterProjekt.Business
         public void DeleteTour(TourObjekt tour);
 
         public void EditTour(TourObjekt newtour);
+
+        public void GeneratePdf(TourObjekt newtour);
     }
 }
