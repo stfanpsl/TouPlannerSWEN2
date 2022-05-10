@@ -19,8 +19,8 @@ namespace TourPlannerSemesterProjekt.Business.Services
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
 
-            Paragraph loremIpsumHeader = new Paragraph(tour.name);
-            document.Add(loremIpsumHeader);
+            Paragraph tourNameHeader = new Paragraph(tour.name);
+            document.Add(tourNameHeader);
             document.Add(new Paragraph(tour.tourDescription));
 
             Paragraph listHeader = new Paragraph("Tour Data:");

@@ -8,6 +8,7 @@ using TourPlannerSemesterProjekt.Models;
 using TourPlannerSemesterProjekt.DataAccess;
 using TourPlannerSemesterProjekt.Business.Services;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace TourPlannerSemesterProjekt.Business
 {
@@ -87,6 +88,29 @@ namespace TourPlannerSemesterProjekt.Business
         {
             PDFGeneratorService _pdfGeneratorService = new PDFGeneratorService();
             _pdfGeneratorService.printPdf(newtour);
+        }
+
+        //JUST FOR TESTING: needs to be divided up to DAL (FileAccess) and own BL-Class (IO/JSON-Service)
+        public void ExportTour(TourObjekt tour)
+        {
+            using (StreamWriter file = File.CreateText("./tour_export.json"))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Formatting = Formatting.Indented;
+                serializer.Serialize(file, tour);
+            }
+        }
+
+        //JUST FOR TESTING: needs to be divided up to DAL (FileAccess) and own BL-Class (IO/JSON-Service)
+        public void ImportTour()
+        {
+            using (StreamReader file = File.OpenText(@"./tour_export.json"))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                TourObjekt? tourImport = (TourObjekt)serializer.Deserialize(file, typeof(TourObjekt));
+
+                _dBAccess.AddNewTour(tourImport);
+            }
         }
     }
 }

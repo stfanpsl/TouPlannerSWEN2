@@ -35,6 +35,7 @@ namespace TourPlannerSemesterProjekt.ViewModels
 
         private ITourPlannerFactory _tourservice;
 
+        //Should probably create a Command Class now that there are this many...
         private ICommand _addCommand;
         public ICommand AddCommand => _addCommand ??= new RelayCommand(AddTour);
 
@@ -46,6 +47,12 @@ namespace TourPlannerSemesterProjekt.ViewModels
 
         private ICommand _pdfCommand;
         public ICommand PDFCommand => _pdfCommand ??= new RelayCommand(PrintPdf);
+
+        private ICommand _exportCommand;
+        public ICommand ExportCommand => _exportCommand ??= new RelayCommand(ExportTour);
+
+        private ICommand _importCommand;
+        public ICommand ImportCommand => _importCommand ??= new RelayCommand(ImportTour);
 
 
         private TourObjekt _currentTour;
@@ -93,7 +100,20 @@ namespace TourPlannerSemesterProjekt.ViewModels
         private void PrintPdf(object commandParameter)
         {
             _tourservice.GeneratePdf(CurrentTour);
-            MessageBox.Show("Your report can be found in the root folder of your installation.", "PDF Generation done");
+            MessageBox.Show("Your printed report can be found in the root folder of your installation.", "PDF Generation done");
+        }
+
+        private void ExportTour(object commandParameter)
+        {
+            _tourservice.ExportTour(CurrentTour);
+            MessageBox.Show("Your exported report can be found in the root folder of your installation.", "Export done");
+        }
+
+        private void ImportTour(object commandParameter)
+        {
+            _tourservice.ImportTour();
+            GetAllTours();
+            MessageBox.Show("Your tour was imported.", "Import done");
         }
 
         private void DeleteTour(object commandParameter)
