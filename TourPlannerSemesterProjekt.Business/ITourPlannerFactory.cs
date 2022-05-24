@@ -5,7 +5,9 @@ namespace TourPlannerSemesterProjekt.Business
 {
     public interface ITourPlannerFactory
     {
-        public List<TourObjekt> GetAllTours();
+        public List<TourObjekt> GetTours(string searchText = "");
+
+        public List<TourLogObjekt> GetTourLogs(TourObjekt tour, string searchText = "");
 
         public void AddNewTour(TourObjekt newtour);
 
@@ -17,6 +19,6 @@ namespace TourPlannerSemesterProjekt.Business
         //JUST FOR TESTING: needs to be divided up to DAL (FileAccess) and own BL-Class (IO/JSON-Service)
         public void ExportTour(TourObjekt tour);
         //JUST FOR TESTING: needs to be divided up to DAL (FileAccess) and own BL-Class (IO/JSON-Service)
-        public void ImportTour();
+        public void ImportTour(string FilePath);
     }
 }

@@ -13,6 +13,7 @@ using TourPlannerSemesterProjekt.DataAccess;
 using System.Collections.ObjectModel;
 using TourPlannerSemesterProjekt.Business;
 using System.Windows.Input;
+using Microsoft.Win32;
 
 namespace TourPlannerSemesterProjekt.ViewModels
 {
@@ -29,6 +30,20 @@ namespace TourPlannerSemesterProjekt.ViewModels
                 {
                     _tourItems = value;
                     RaisePropertyChanged(nameof(TourItems));
+                }
+            }
+        }
+
+        private ObservableCollection<TourLogObjekt> _tourLogItems;
+        public ObservableCollection<TourLogObjekt> TourLogItems
+        {
+            get => _tourLogItems;
+            set
+            {
+                if (_tourLogItems != value)
+                {
+                    _tourLogItems = value;
+                    RaisePropertyChanged(nameof(TourLogItems));
                 }
             }
         }
@@ -54,9 +69,11 @@ namespace TourPlannerSemesterProjekt.ViewModels
         private ICommand _importCommand;
         public ICommand ImportCommand => _importCommand ??= new RelayCommand(ImportTour);
 
+        private ICommand _searchCommand;
+        public ICommand SearchCommand => _searchCommand ??= new RelayCommand(SearchTours);
+
 
         private TourObjekt _currentTour;
-
 
         public TourObjekt CurrentTour
         {
@@ -67,6 +84,65 @@ namespace TourPlannerSemesterProjekt.ViewModels
                 {
                     _currentTour = value;
                     RaisePropertyChanged(nameof(CurrentTour));
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            if(CurrentTour != null)
+            {
+                GetTourLogs(CurrentTour);
+            }
+            else
+            {
+                TourLogItems.Clear();
+            }
+        }
+
+        private TourLogObjekt _currentTourLog;
+
+        public TourLogObjekt CurrentTourLog
+        {
+            get => _currentTourLog;
+            set
+            {
+                if (_currentTourLog != value)
+                {
+                    _currentTourLog = value;
+                    RaisePropertyChanged(nameof(CurrentTourLog));
+                }
+            }
+        }
+
+
+        private string _searchText;
+
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                if (_searchText != value)
+                {
+                    _searchText = value;
+                    RaisePropertyChanged(nameof(SearchText));
+                }
+            }
+        }
+
+        private string _searchTextLog;
+
+        public string SearchTextLog
+        {
+            get => _searchTextLog;
+            set
+            {
+                if (_searchTextLog != value)
+                {
+                    _searchTextLog = value;
+                    RaisePropertyChanged(nameof(SearchTextLog));
                 }
             }
         }
@@ -75,12 +151,23 @@ namespace TourPlannerSemesterProjekt.ViewModels
         {
             _tourservice = TourPlannerFactory.GetInstance();
 
-            GetAllTours();
+            GetTours();
         }
 
-        public void GetAllTours()
+        public void GetTours()
         {
-            TourItems = new ObservableCollection<TourObjekt>(_tourservice.GetAllTours());
+            TourItems = new ObservableCollection<TourObjekt>(_tourservice.GetTours());
+        }
+
+        public void GetTourLogs(TourObjekt tour)
+        {
+            TourLogItems = new ObservableCollection<TourLogObjekt>(_tourservice.GetTourLogs(tour));
+        }
+
+        public void SearchTours(object commandParameter)
+        {
+            TourItems.Clear();
+            TourItems = new ObservableCollection<TourObjekt>(_tourservice.GetTours(SearchText));
         }
 
 
@@ -109,11 +196,16 @@ namespace TourPlannerSemesterProjekt.ViewModels
             MessageBox.Show("Your exported report can be found in the root folder of your installation.", "Export done");
         }
 
+        //Add File Upload Control to View
         private void ImportTour(object commandParameter)
         {
-            _tourservice.ImportTour();
-            GetAllTours();
-            MessageBox.Show("Your tour was imported.", "Import done");
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                _tourservice.ImportTour(openFileDialog.FileName);
+                GetTours();
+                MessageBox.Show("Your tour was imported.", "Import done");
+            }
         }
 
         private void DeleteTour(object commandParameter)

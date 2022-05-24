@@ -32,8 +32,17 @@
         <Button Command="{Binding PDFCommand}" Grid.Column ="0" Grid.Row="1" Content="File" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
         <Button Command="{Binding EditCommand}" Grid.Column ="1" Grid.Row="1" Content="Edit" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
         <Button Command="{Binding ExportCommand}" Grid.Column ="2" Grid.Row="1" Content="Export/Import" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
-        <Button Command="{Binding ImportCommand}" Grid.Column ="3" Grid.Row="1" Content="Options" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
-        <TextBox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" TextWrapping="Wrap" Text="" Height="30"/>
+        <!--<Button Command="{Binding ImportCommand}" Grid.Column ="3" Grid.Row="1" Content="Options" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>-->
+        <Menu  Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial" Grid.Column ="3" Grid.Row="1" >
+            <MenuItem Width="180" Height="30" FontFamily="Arial" >
+                <MenuItem.Header  >
+                    <TextBlock Text="Header" />
+                </MenuItem.Header>
+                <MenuItem Command="{Binding ExportCommand}"  Header="_Export" />
+                <MenuItem Command="{Binding ImportCommand}"  Header="_Import" />
+            </MenuItem>
+        </Menu>
+        <TextBox Text="{Binding SearchText}" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" TextWrapping="Wrap" Height="30"/>
         <TextBlock Grid.Column="0" Grid.Row="3">Tours</TextBlock>
         <Button Command="{Binding AddCommand}"  Content="+" Grid.Column="0" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center" Width="56" Background="DodgerBlue" BorderBrush="DarkBlue"/>
         <Button Command="{Binding DeleteCommand}" Content="-" Grid.Column="0" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Right" Width="56" Background="DodgerBlue" BorderBrush="DarkBlue"/>
@@ -43,6 +52,7 @@
             <TextBlock Margin="5" Text="{Binding SelectedItem.from, StringFormat='Start: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.to, StringFormat='Destination: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.tourDistance, StringFormat='Distance: {0} km', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
+            <TextBlock Margin="5" Text="{Binding SelectedItem.estimatedTime, StringFormat='Estimated Time of Arrival: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
         </StackPanel>
         <Image Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" Width="auto" Height="auto" Source="{Binding SelectedItem.imagePath, ElementName=TourListBox}"></Image>
         <!--<ListBox Grid.Row="4" Grid.RowSpan="3" d:ItemsSource="{Binding _items}"/>-->
@@ -57,8 +67,26 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <DataGrid Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="3" d:ItemsSource="{d:SampleData ItemCount=6}"/>
-        <Image Grid.Column="3" Grid.Row="2" Source="/img/SearchIcon.png" Height="25" Width="25" HorizontalAlignment="Left"></Image>
+        <ListBox Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="1" x:Name="TourLogListBox" 
+                 ItemsSource="{Binding TourLogItems, Mode=TwoWay}" 
+                 SelectedItem="{Binding CurrentTourLog, Mode=TwoWay}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{Binding l_date}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <StackPanel Margin="5" Orientation="Vertical" Grid.Column="2" Grid.Row="6" Grid.ColumnSpan="2">
+            <TextBlock Margin="5" Text="{Binding SelectedItem.l_comment, StringFormat='Comment: {0}', ElementName=TourLogListBox}" TextWrapping="Wrap" Background="White"/>
+            <TextBlock Margin="5" Text="{Binding SelectedItem.l_difficulty, StringFormat='Difficulty: {0}', ElementName=TourLogListBox}" TextWrapping="Wrap" Background="White"/>
+            <TextBlock Margin="5" Text="{Binding SelectedItem.l_totaltime, StringFormat='Total Time: {0}', ElementName=TourLogListBox}" TextWrapping="Wrap" Background="White"/>
+            <TextBlock Margin="5" Text="{Binding SelectedItem.l_rating, StringFormat='Rating: {0}', ElementName=TourLogListBox}" TextWrapping="Wrap" Background="White"/>
+        </StackPanel>
+        <Button Command="{Binding SearchCommand}" HorizontalAlignment="Left" Height="25" Width="25" Grid.Column="3" Grid.Row="2">
+            <Image Source="/img/SearchIcon.png" />
+        </Button>
     </Grid>
 
 

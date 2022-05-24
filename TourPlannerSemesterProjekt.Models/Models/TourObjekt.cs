@@ -17,9 +17,10 @@ namespace TourPlannerSemesterProjekt.Models
         public string transportType { get; set; }
         public string routeInformation { get; set; }
         public double tourDistance { get; set; }
+        public List<TourLogObjekt> tourlogs { get; set; }
 
         public string imagePath { get; set; }
-        public DateTime estimatedTime { get; set; }
+        public string estimatedTime { get; set; }
 
         public TourObjekt(int id,
                           string name,
@@ -29,7 +30,7 @@ namespace TourPlannerSemesterProjekt.Models
                           string transportType,
                           string routeInformation,
                           double tourDistance,
-                          DateTime estimatedTime,
+                          string estimatedTime,
                           string imagePath)
         {
             this.name = name;

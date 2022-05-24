@@ -18,6 +18,12 @@ namespace TourPlannerSemesterProjekt.DataAccess
 
         private const string SQL_GET_ALL_TOURS = "SELECT * FROM tour";
 
+        private const string SQL_SEARCH_TOURS = "SELECT * FROM tour WHERE LOWER(\"name\") LIKE LOWER(@nname)";
+
+        private const string SQL_GET_TOURLOGS = "SELECT * FROM tourlogs WHERE \"l_tour\" = @l_tour";
+
+        private const string SQL_SEARCH_TOURLOGS = "SELECT * FROM tourlogs WHERE LOWER(\"l_comment\") LIKE LOWER(@nl_comment)";
+
         private const string SQL_INSERT_TOUR = "INSERT INTO tour (\"name\", \"tourDescription\", \"toAddress\", \"fromAddress\", \"transportType\", \"routeInformation\", \"tourDistance\", \"estimatedArrTime\", \"filePath\") VALUES (@nname, @ntourDescription, @ntoAddress, @nfromAddress, @ntransportType, @nrouteInformation, @ntourDistance, @nestimatedArrTime, @nfilePath)";
 
         private const string SQL_UPDATE_TOUR = "UPDATE tour SET \"name\" = @nname, \"tourDescription\" = @ntourDescription, \"toAddress\" = @ntoAddress, \"fromAddress\" = @nfromAddress, \"transportType\" = @ntransportType, \"routeInformation\" = @nrouteInformation, \"tourDistance\" =@ntourDistance , \"estimatedArrTime\" = @nestimatedArrTime WHERE id = @id";
@@ -25,7 +31,7 @@ namespace TourPlannerSemesterProjekt.DataAccess
         private const string SQL_DELETE_TOUR = "DELETE FROM tour WHERE \"id\" = @id";
 
 
-        private static Lazy<TourPlannerDBAccess> _instance; // Singleton pattern
+        private static Lazy<TourPlannerDBAccess> _instance;
 
         public static TourPlannerDBAccess GetInstance()
         {
@@ -34,13 +40,19 @@ namespace TourPlannerSemesterProjekt.DataAccess
             return _instance.Value;
         }
 
-        public List<TourObjekt> GetAllTours()
+        public List<TourObjekt> GetTours(string searchText = "")
         {
             var Tours = new List<TourObjekt>();
 
             var conn = CreateOpenConnection();
 
             using var cmd = new NpgsqlCommand(SQL_GET_ALL_TOURS, conn);
+
+            if (searchText != "")
+            {
+                cmd.CommandText = SQL_SEARCH_TOURS;
+                cmd.Parameters.AddWithValue("nname", ("%" + searchText + "%"));
+            }
 
             try
             {
@@ -52,13 +64,13 @@ namespace TourPlannerSemesterProjekt.DataAccess
                         var id = reader.GetInt32(0);
                         string name = reader.GetString(1);
                         string tourdescription = reader.GetString(2);
-                        string to = reader.GetString(3);
-                        string from = reader.GetString(4);
+                        string from = reader.GetString(3);
+                        string to = reader.GetString(4);
                         string transporttype = reader.GetString(5);
                         string routeinformation = reader.GetString(6);
                         double tourdistance = reader.GetDouble(7);
-                        DateTime estArrival = reader.GetDateTime(8);
-                        string filepath = reader.GetString(9);
+                        string filepath = reader.GetString(8);
+                        string estArrival = reader.GetString(9);
                         var tour = new TourObjekt(id, name, tourdescription, to, from, transporttype, routeinformation, tourdistance, estArrival, filepath);
                         Tours.Add(tour);
                     }
@@ -74,6 +86,54 @@ namespace TourPlannerSemesterProjekt.DataAccess
             return Tours;
 
         }
+
+        public List<TourLogObjekt> GetTourLogs(TourObjekt tour, string searchText = "")
+        {
+            var TourLogs = new List<TourLogObjekt>();
+
+            var conn = CreateOpenConnection();
+
+            using var cmd = new NpgsqlCommand(SQL_GET_TOURLOGS, conn);
+
+            cmd.Parameters.AddWithValue("l_tour", tour.id);
+
+            if (searchText != "")
+            {
+                cmd.CommandText = SQL_SEARCH_TOURS;
+                cmd.Parameters.AddWithValue("l_comment", ("%" + searchText + "%"));
+            }
+
+            try
+            {
+                var reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        var id = reader.GetInt32(0);
+                        DateTime date = reader.GetDateTime(1);
+                        string comment = reader.GetString(2);
+                        string difficulty = reader.GetString(3);
+                        string totaltime = reader.GetString(4);
+                        int rating = reader.GetInt32(5);
+                        int tourreference = reader.GetInt32(6);
+                        var tourlog = new TourLogObjekt(id, date, comment, difficulty, totaltime, rating);
+                        TourLogs.Add(tourlog);
+                    }
+                }
+            }
+
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new NpgsqlException("Error in database occurred.", ex);
+            }
+
+            conn.Close();
+            return TourLogs;
+
+        }
+
 
         public void AddNewTour(TourObjekt newtour)
         {

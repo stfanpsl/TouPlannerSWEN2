@@ -22,11 +22,41 @@ namespace TourPlannerSemesterProjekt.Business
             _dBAccess = repository;
         }
 
-        public List<TourObjekt> GetAllTours()
+        public List<TourObjekt> GetTours(string searchText = "")
         {
+            var allTours = new List<TourObjekt>();
             try
             {
-                var allTours = _dBAccess.GetAllTours();
+                if (searchText != "")
+                {
+                    allTours = _dBAccess.GetTours(searchText);
+                }
+                else
+                {
+                    allTours = _dBAccess.GetTours();
+                }
+                return allTours;
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new NpgsqlException("Error in database occurred.", ex);
+            }
+        }
+
+        public List<TourLogObjekt> GetTourLogs(TourObjekt tour, string searchText = "")
+        {
+            var allTours = new List<TourLogObjekt>();
+            try
+            {
+                if (searchText != "")
+                {
+                    allTours = _dBAccess.GetTourLogs(tour, searchText);
+                }
+                else
+                {
+                    allTours = _dBAccess.GetTourLogs(tour);
+                }
                 return allTours;
             }
             catch (NpgsqlException ex)
@@ -42,8 +72,10 @@ namespace TourPlannerSemesterProjekt.Business
             MapQuestService _mapQuestService = new MapQuestService(newtour.from, newtour.to);
             string imagePath = _mapQuestService.GetImage();
             double tourDistance = _mapQuestService.GetRouteDistance();
+            string arrivalTime = _mapQuestService.GetArrivalTime();
 
             newtour.tourDistance = tourDistance;
+            newtour.estimatedTime = arrivalTime;
             newtour.imagePath = imagePath;
 
             try
@@ -102,9 +134,9 @@ namespace TourPlannerSemesterProjekt.Business
         }
 
         //JUST FOR TESTING: needs to be divided up to DAL (FileAccess) and own BL-Class (IO/JSON-Service)
-        public void ImportTour()
+        public void ImportTour(string filePath)
         {
-            using (StreamReader file = File.OpenText(@"./tour_export.json"))
+            using (StreamReader file = File.OpenText(filePath))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 TourObjekt? tourImport = (TourObjekt)serializer.Deserialize(file, typeof(TourObjekt));

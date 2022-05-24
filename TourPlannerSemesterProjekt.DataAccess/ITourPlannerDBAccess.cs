@@ -10,7 +10,9 @@ namespace TourPlannerSemesterProjekt.DataAccess
     public interface ITourPlannerDBAccess
     {
 
-        public List<TourObjekt> GetAllTours();
+        public List<TourObjekt> GetTours(string searchText = "");
+
+        public List<TourLogObjekt> GetTourLogs(TourObjekt tour, string searchText = "");
 
         public void AddNewTour(TourObjekt newtour);
 

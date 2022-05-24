@@ -76,7 +76,7 @@ namespace TourPlannerSemesterProjekt.ViewModels
             logger.Debug("New Tour: '" + newTour.name + "' created.");
             _tourservice.AddNewTour(newTour);
             //_mainView.TourItems.Add(newTour);
-            _mainView.GetAllTours();
+            _mainView.GetTours();
             _window.Close();
 
             
@@ -85,7 +85,7 @@ namespace TourPlannerSemesterProjekt.ViewModels
         private void UpdateTour(TourObjekt newTour)
         {
             _tourservice.EditTour(newTour);
-            _mainView.GetAllTours();
+            _mainView.GetTours();
             _window.Close();
         }
 

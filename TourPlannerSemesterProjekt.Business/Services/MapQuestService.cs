@@ -67,6 +67,17 @@ namespace TourPlannerSemesterProjekt.Business.Services
             return -1;
         }
 
+        public string GetArrivalTime()
+        {
+            if (_routeData != null)
+            {
+                return (string)_routeData["route"]["formattedTime"];
+            }
+
+            return "";
+        }
+
+        //Connect to FileAccess DAL
         public string GetImage()
         {
             if (_routeData != null)
