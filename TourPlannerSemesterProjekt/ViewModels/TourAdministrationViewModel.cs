@@ -74,12 +74,16 @@ namespace TourPlannerSemesterProjekt.ViewModels
         private void InsertTour(TourObjekt newTour)
         {
             logger.Debug("New Tour: '" + newTour.name + "' created.");
-            _tourservice.AddNewTour(newTour);
-            //_mainView.TourItems.Add(newTour);
-            _mainView.GetTours();
-            _window.Close();
-
-            
+            if (_tourservice.CheckTour(newTour))
+            {
+                _tourservice.AddNewTour(newTour);
+                _mainView.GetTours();
+                _window.Close();
+            }
+            else
+            {
+                MessageBox.Show("Please check if the 'To' and 'From' fields have been correctly filled in.'", "Route could not be found!");
+            }
         }
 
         private void UpdateTour(TourObjekt newTour)

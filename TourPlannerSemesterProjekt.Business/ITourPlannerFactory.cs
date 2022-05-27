@@ -9,6 +9,8 @@ namespace TourPlannerSemesterProjekt.Business
 
         public List<TourLogObjekt> GetTourLogs(TourObjekt tour, string searchText = "");
 
+        public bool CheckTour(TourObjekt newtour);
+
         public void AddNewTour(TourObjekt newtour);
 
         public void DeleteTour(TourObjekt tour);

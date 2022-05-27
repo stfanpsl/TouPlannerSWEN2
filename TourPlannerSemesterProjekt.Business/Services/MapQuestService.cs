@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using TourPlannerSemesterProjekt.Logging;
+using TourPlannerSemesterProjekt.DataAccess;
 
 namespace TourPlannerSemesterProjekt.Business.Services
 {
@@ -57,6 +58,25 @@ namespace TourPlannerSemesterProjekt.Business.Services
             return null;
         }
 
+        public bool CheckRoute()
+        {
+            if (_routeData != null)
+            {
+                if ((string)_routeData["route"]["formattedTime"] == "00:00:00" || (string)_routeData["route"]["routeError"]["errorCode"] == "2")
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }    
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public double GetRouteDistance()
         {
             if (_routeData != null)
@@ -82,6 +102,8 @@ namespace TourPlannerSemesterProjekt.Business.Services
         {
             if (_routeData != null)
             {
+                var fileAcess = new TourPlannerFileAccess();
+
                 string session = (string)_routeData["route"]["sessionId"];
                 string lrLng = (string)_routeData["route"]["boundingBox"]["lr"]["lng"];
                 string lrLat = (string)_routeData["route"]["boundingBox"]["lr"]["lat"];
@@ -89,8 +111,7 @@ namespace TourPlannerSemesterProjekt.Business.Services
                 string ulLat = (string)_routeData["route"]["boundingBox"]["ul"]["lat"];
 
                 var url = _baseUrl + "/staticmap/v5/map?key=" + _apiKey + "&size=600,600" + "&session=" + session + "&boundingBox=" + ulLat + "," + ulLng + "," + lrLat + "," + lrLng;
-                var fileName = System.IO.Path.GetRandomFileName() + ".jpg";
-                var fullFilePath = _filePath + fileName;
+                var savedFilePath = "/img/placeholder.png";
                 using (WebClient client = new WebClient())
                 {
                     try
@@ -100,18 +121,18 @@ namespace TourPlannerSemesterProjekt.Business.Services
                         {
                             using (var image = Image.FromStream(ms))
                             {
-                                image.Save(fullFilePath, ImageFormat.Jpeg);
+                                //image.Save(fullFilePath, ImageFormat.Jpeg);
+                                savedFilePath = fileAcess.SaveImage(image);
                             }
                         }
                     }
                     catch (System.Net.WebException ex)
                     {
                         logger.Error("Route does not exist!!!");
-                        fullFilePath = "/img/placeholder.png";
                     }
 
                 }
-                return fullFilePath;
+                return savedFilePath;
             }
             return "";
 

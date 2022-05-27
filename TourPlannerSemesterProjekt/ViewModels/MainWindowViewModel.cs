@@ -161,6 +161,7 @@ namespace TourPlannerSemesterProjekt.ViewModels
 
         public void GetTourLogs(TourObjekt tour)
         {
+            CurrentTour.tourlogs = _tourservice.GetTourLogs(tour);
             TourLogItems = new ObservableCollection<TourLogObjekt>(_tourservice.GetTourLogs(tour));
         }
 
@@ -192,8 +193,11 @@ namespace TourPlannerSemesterProjekt.ViewModels
 
         private void ExportTour(object commandParameter)
         {
-            _tourservice.ExportTour(CurrentTour);
-            MessageBox.Show("Your exported report can be found in the root folder of your installation.", "Export done");
+            if(CurrentTour != null)
+            {
+                _tourservice.ExportTour(CurrentTour);
+                MessageBox.Show("Your exported report can be found in the root folder of your installation.", "Export done");
+            }
         }
 
         //Add File Upload Control to View
@@ -210,11 +214,11 @@ namespace TourPlannerSemesterProjekt.ViewModels
 
         private void DeleteTour(object commandParameter)
         {
-
             if (CurrentTour != null)
             {
-                _tourservice.DeleteTour(CurrentTour);
+                var delTour = CurrentTour;
                 TourItems.Remove(CurrentTour);
+                _tourservice.DeleteTour(delTour);
 
                 CurrentTour = null;
             }

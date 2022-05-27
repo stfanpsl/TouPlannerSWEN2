@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using TourPlannerSemesterProjekt.Models;
 
 namespace TourPlannerSemesterProjekt.UnitTests
 {
@@ -7,6 +8,15 @@ namespace TourPlannerSemesterProjekt.UnitTests
         [SetUp]
         public void Setup()
         {
+
+        }
+
+        [Test]
+        public void TourNamingTest()
+        {
+            TourObjekt tour = new TourObjekt();
+            tour.name = "Test";
+            Assert.AreEqual("Test", tour.name);
         }
 
         [Test]
