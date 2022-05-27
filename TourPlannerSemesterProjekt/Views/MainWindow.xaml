@@ -10,7 +10,7 @@
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
-    <Grid>
+    <Grid ShowGridLines="False">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
@@ -32,7 +32,6 @@
         <Button Command="{Binding PDFCommand}" Grid.Column ="0" Grid.Row="1" Content="File" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
         <Button Command="{Binding EditCommand}" Grid.Column ="1" Grid.Row="1" Content="Edit" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
         <Button Command="{Binding ExportCommand}" Grid.Column ="2" Grid.Row="1" Content="Export/Import" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
-        <!--<Button Command="{Binding ImportCommand}" Grid.Column ="3" Grid.Row="1" Content="Options" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>-->
         <Menu  Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial" Grid.Column ="3" Grid.Row="1" >
             <MenuItem Width="180" Height="30" FontFamily="Arial" >
                 <MenuItem.Header  >
@@ -53,9 +52,26 @@
             <TextBlock Margin="5" Text="{Binding SelectedItem.to, StringFormat='Destination: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.tourDistance, StringFormat='Distance: {0} km', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.estimatedTime, StringFormat='Estimated Time of Arrival: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
+
+
+            <StackPanel HorizontalAlignment="Center" Height="auto" Margin="0,50,2,35" Orientation="Horizontal" VerticalAlignment="Bottom" Visibility="{Binding CurrentTour, TargetNullValue=Collapsed}">
+
+                <Button Margin="5" Command="{Binding AddCommand}"  Content="+"  HorizontalAlignment="Left" Height="30" Width="30" Background="DodgerBlue" BorderBrush="DarkBlue"/>
+                <Button Margin="5" Command="{Binding DeleteCommand}" Content="-" HorizontalAlignment="Right" Width="30" Background="DodgerBlue" BorderBrush="DarkBlue"/>
+                <Button Margin="5" DockPanel.Dock="Bottom" Height="30" x:Name="btnOne" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="30" Background="DodgerBlue" BorderBrush="DarkBlue">
+                    <Image Source="/img/EditIcon.png"/>
+                </Button>
+            </StackPanel>
+
+
+
+
+
         </StackPanel>
-        <Image Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" Width="auto" Height="auto" Source="{Binding SelectedItem.imagePath, ElementName=TourListBox}"></Image>
-        <!--<ListBox Grid.Row="4" Grid.RowSpan="3" d:ItemsSource="{Binding _items}"/>-->
+        <Border Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" BorderBrush="Black" BorderThickness="1">
+            <Image Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" Width="auto" Height="auto" Source="{Binding SelectedItem.imagePath, ElementName=TourListBox}"></Image>
+        </Border>
+
         <ListBox Grid.Row="4" Grid.RowSpan="3" x:Name="TourListBox" 
                  ItemsSource="{Binding TourItems, Mode=TwoWay}" 
                  SelectedItem="{Binding CurrentTour, Mode=TwoWay}">
@@ -88,13 +104,5 @@
             <Image Source="/img/SearchIcon.png" />
         </Button>
     </Grid>
-
-
-
-
-
-
-
-
 
 </Window>

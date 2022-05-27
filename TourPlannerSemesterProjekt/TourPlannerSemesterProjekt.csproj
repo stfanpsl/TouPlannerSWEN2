@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="img\EditIcon.png" />
     <None Remove="img\placeholder.png" />
     <None Remove="img\SearchIcon.png" />
   </ItemGroup>
@@ -20,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="img\EditIcon.png" />
     <Resource Include="img\placeholder.png" />
     <Resource Include="img\SearchIcon.png" />
   </ItemGroup>
