@@ -73,8 +73,22 @@ namespace TourPlannerSemesterProjekt.Business
             string imagePath = _mapQuestService.GetImage();
             double tourDistance = _mapQuestService.GetRouteDistance();
             string arrivalTime = _mapQuestService.GetArrivalTime();
+            double caloriefuel = 0;
+            switch (newtour.transportType)
+            {
+                case "By Car":
+                caloriefuel = (tourDistance * 0.077);
+                break;
+                case "By Bike":
+                caloriefuel = (tourDistance * 62);
+                break;
+                case "On Foot":
+                caloriefuel = (tourDistance * 23);
+                break;
+            }
 
-            newtour.tourDistance = tourDistance;
+            newtour.caloriefuel = Math.Round(caloriefuel, 2);
+            newtour.tourDistance = Math.Round(tourDistance, 2);
             newtour.estimatedTime = arrivalTime;
             newtour.imagePath = imagePath;
 
@@ -106,6 +120,22 @@ namespace TourPlannerSemesterProjekt.Business
         {
             try
             {
+                double caloriefuel = 0;
+                switch (newtour.transportType)
+                {
+                    case "By Car":
+                        caloriefuel = (newtour.tourDistance * 0.077);
+                        break;
+                    case "By Bike":
+                        caloriefuel = (newtour.tourDistance * 62);
+                        break;
+                    case "On Foot":
+                        caloriefuel = (newtour.tourDistance * 23);
+                        break;
+                }
+
+                newtour.caloriefuel = Math.Round(caloriefuel, 2);
+
                 _dBAccess.EditTour(newtour);
             }
             catch (NpgsqlException ex)
@@ -123,6 +153,48 @@ namespace TourPlannerSemesterProjekt.Business
             {
                 _dBAccess.DeleteTour(tour);
                 //fileAcess.DeleteFile(tour.imagePath);
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new NpgsqlException("Error in database occurred.", ex);
+            }
+        }
+
+
+        public void AddNewTourLog(TourLogObjekt newtourlog)
+        {
+            try
+            {
+                _dBAccess.AddNewTourLog(newtourlog);
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new NpgsqlException("Error in database occurred.", ex);
+            }
+        }
+
+        public void EditTourLog(TourLogObjekt newtourlog)
+        {
+            try
+            {
+                _dBAccess.EditTourLog(newtourlog);
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new NpgsqlException("Error in database occurred.", ex);
+            }
+        }
+
+
+        public void DeleteTourLog(TourLogObjekt newtourlog)
+        {
+            TourPlannerFileAccess fileAcess = new TourPlannerFileAccess();
+            try
+            {
+                _dBAccess.DeleteTourLog(newtourlog);
             }
             catch (NpgsqlException ex)
             {

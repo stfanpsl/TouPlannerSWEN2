@@ -24,11 +24,17 @@ namespace TourPlannerSemesterProjekt.DataAccess
 
         private const string SQL_SEARCH_TOURLOGS = "SELECT * FROM tourlogs WHERE LOWER(\"l_comment\") LIKE LOWER(@nl_comment)";
 
-        private const string SQL_INSERT_TOUR = "INSERT INTO tour (\"name\", \"tourDescription\", \"toAddress\", \"fromAddress\", \"transportType\", \"routeInformation\", \"tourDistance\", \"estimatedArrTime\", \"filePath\") VALUES (@nname, @ntourDescription, @ntoAddress, @nfromAddress, @ntransportType, @nrouteInformation, @ntourDistance, @nestimatedArrTime, @nfilePath)";
+        private const string SQL_INSERT_TOUR = "INSERT INTO tour (\"name\", \"tourDescription\", \"toAddress\", \"fromAddress\", \"transportType\", \"routeInformation\", \"tourDistance\", \"estimatedArrTime\", \"filePath\", \"caloriefuel\") VALUES (@nname, @ntourDescription, @ntoAddress, @nfromAddress, @ntransportType, @nrouteInformation, @ntourDistance, @nestimatedArrTime, @nfilePath, @ncaloriefuel)";
 
-        private const string SQL_UPDATE_TOUR = "UPDATE tour SET \"name\" = @nname, \"tourDescription\" = @ntourDescription, \"toAddress\" = @ntoAddress, \"fromAddress\" = @nfromAddress, \"transportType\" = @ntransportType, \"routeInformation\" = @nrouteInformation, \"tourDistance\" =@ntourDistance , \"estimatedArrTime\" = @nestimatedArrTime WHERE id = @id";
+        private const string SQL_UPDATE_TOUR = "UPDATE tour SET \"name\" = @nname, \"tourDescription\" = @ntourDescription, \"toAddress\" = @ntoAddress, \"fromAddress\" = @nfromAddress, \"transportType\" = @ntransportType, \"routeInformation\" = @nrouteInformation, \"tourDistance\" =@ntourDistance , \"estimatedArrTime\" = @nestimatedArrTime, \"caloriefuel\" = @ncaloriefuel WHERE id = @id";
 
         private const string SQL_DELETE_TOUR = "DELETE FROM tour WHERE \"id\" = @id";
+
+        private const string SQL_INSERT_TOURLOG = "INSERT INTO tourlogs (\"l_date\", \"l_comment\", \"l_difficulty\", \"l_totaltime\", \"l_rating\", \"l_tour\") VALUES (@nl_date, @nl_comment, @nl_difficulty, @nl_totaltime, @nl_rating, @nl_tour)";
+
+        private const string SQL_UPDATE_TOURLOG = "UPDATE tourlogs SET \"l_date\" = @nl_date, \"l_comment\" = @nl_comment, \"l_difficulty\" = @nl_difficulty, \"l_totaltime\" = @nl_totaltime, \"l_rating\" = @nl_rating WHERE l_id = @l_id";
+
+        private const string SQL_DELETE_TOURLOG = "DELETE FROM tourlogs WHERE \"l_id\" = @l_id";
 
 
         private static Lazy<TourPlannerDBAccess> _instance;
@@ -71,7 +77,9 @@ namespace TourPlannerSemesterProjekt.DataAccess
                         double tourdistance = reader.GetDouble(7);
                         string filepath = reader.GetString(8);
                         string estArrival = reader.GetString(9);
+                        double caloriefuel = reader.GetDouble(10);
                         var tour = new TourObjekt(id, name, tourdescription, to, from, transporttype, routeinformation, tourdistance, estArrival, filepath);
+                        tour.caloriefuel = caloriefuel;
                         Tours.Add(tour);
                     }
                 }
@@ -99,8 +107,8 @@ namespace TourPlannerSemesterProjekt.DataAccess
 
             if (searchText != "")
             {
-                cmd.CommandText = SQL_SEARCH_TOURS;
-                cmd.Parameters.AddWithValue("l_comment", ("%" + searchText + "%"));
+                cmd.CommandText = SQL_SEARCH_TOURLOGS;
+                cmd.Parameters.AddWithValue("nl_comment", ("%" + searchText + "%"));
             }
 
             try
@@ -117,7 +125,7 @@ namespace TourPlannerSemesterProjekt.DataAccess
                         string totaltime = reader.GetString(4);
                         int rating = reader.GetInt32(5);
                         int tourreference = reader.GetInt32(6);
-                        var tourlog = new TourLogObjekt(id, date, comment, difficulty, totaltime, rating);
+                        var tourlog = new TourLogObjekt(id, date, comment, difficulty, totaltime, rating, tourreference);
                         TourLogs.Add(tourlog);
                     }
                 }
@@ -156,6 +164,8 @@ namespace TourPlannerSemesterProjekt.DataAccess
                 insertCommand.Parameters.AddWithValue("ntourDistance", newtour.tourDistance);
                 insertCommand.Parameters.AddWithValue("nestimatedArrTime", newtour.estimatedTime);
                 insertCommand.Parameters.AddWithValue("nfilePath", newtour.imagePath);
+                insertCommand.Parameters.AddWithValue("ncaloriefuel", newtour.caloriefuel);
+
 
                 insertCommand.Prepare();
 
@@ -190,6 +200,7 @@ namespace TourPlannerSemesterProjekt.DataAccess
                 updateCommand.Parameters.AddWithValue("nrouteInformation", newtour.routeInformation);
                 updateCommand.Parameters.AddWithValue("ntourDistance", newtour.tourDistance);
                 updateCommand.Parameters.AddWithValue("nestimatedArrTime", newtour.estimatedTime);
+                updateCommand.Parameters.AddWithValue("ncaloriefuel", newtour.caloriefuel);
 
                 updateCommand.Parameters.AddWithValue("id", newtour.id);
 
@@ -220,6 +231,93 @@ namespace TourPlannerSemesterProjekt.DataAccess
             {
                 //name, tourDescription, to, from, transportType, routeInformation, tourDistance, estimatedArrTime
                 removeCommand.Parameters.AddWithValue("id", newtour.id);
+
+                removeCommand.Prepare();
+
+                removeCommand.ExecuteNonQuery();
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new NpgsqlException("Error in database occurred.", ex);
+            }
+
+            conn.Close();
+        }
+
+        public void AddNewTourLog(TourLogObjekt newtourlog)
+        {
+
+            var conn = CreateOpenConnection();
+
+            using var insertCommand = new NpgsqlCommand(SQL_INSERT_TOURLOG, conn);
+
+
+            try
+            {
+                insertCommand.Parameters.AddWithValue("nl_date", newtourlog.l_date);
+                insertCommand.Parameters.AddWithValue("nl_comment", newtourlog.l_comment);
+                insertCommand.Parameters.AddWithValue("nl_difficulty", newtourlog.l_difficulty);
+                insertCommand.Parameters.AddWithValue("nl_rating", newtourlog.l_rating);
+                insertCommand.Parameters.AddWithValue("nl_totaltime", newtourlog.l_totaltime);
+                insertCommand.Parameters.AddWithValue("nl_tour", newtourlog.l_tour);
+
+                insertCommand.Prepare();
+
+                insertCommand.ExecuteNonQuery();
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new NpgsqlException("Error in database occurred.", ex);
+            }
+
+            conn.Close();
+        }
+
+        public void EditTourLog(TourLogObjekt newtourlog)
+        {
+
+            var conn = CreateOpenConnection();
+
+            using var updateCommand = new NpgsqlCommand(SQL_UPDATE_TOURLOG, conn);
+
+
+            try
+            {
+                updateCommand.Parameters.AddWithValue("nl_date", newtourlog.l_date);
+                updateCommand.Parameters.AddWithValue("nl_comment", newtourlog.l_comment);
+                updateCommand.Parameters.AddWithValue("nl_difficulty", newtourlog.l_difficulty);
+                updateCommand.Parameters.AddWithValue("nl_rating", newtourlog.l_rating);
+                updateCommand.Parameters.AddWithValue("nl_totaltime", newtourlog.l_totaltime);
+
+                updateCommand.Parameters.AddWithValue("l_id", newtourlog.l_id);
+
+                updateCommand.Prepare();
+
+                updateCommand.ExecuteNonQuery();
+            }
+            catch (NpgsqlException ex)
+            {
+                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                throw new NpgsqlException("Error in database occurred.", ex);
+            }
+
+            conn.Close();
+        }
+
+
+        public void DeleteTourLog(TourLogObjekt newtourlog)
+        {
+
+            var conn = CreateOpenConnection();
+
+            using var removeCommand = new NpgsqlCommand(SQL_DELETE_TOURLOG, conn);
+
+
+            try
+            {
+                removeCommand.Parameters.AddWithValue("id", newtourlog.l_id);
 
                 removeCommand.Prepare();
 

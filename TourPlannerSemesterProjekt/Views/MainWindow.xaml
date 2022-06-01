@@ -10,7 +10,7 @@
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
-    <Grid ShowGridLines="False">
+    <Grid ShowGridLines="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
@@ -29,13 +29,13 @@
         </Grid.RowDefinitions>
 
         <Label Grid.Column="0" Grid.Row="0" Background="LightBlue"  Grid.ColumnSpan="4">Tour - Planner</Label>
-        <Button Command="{Binding PDFCommand}" Grid.Column ="0" Grid.Row="1" Content="File" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
-        <Button Command="{Binding EditCommand}" Grid.Column ="1" Grid.Row="1" Content="Edit" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
-        <Button Command="{Binding ExportCommand}" Grid.Column ="2" Grid.Row="1" Content="Export/Import" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
-        <Menu  Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial" Grid.Column ="3" Grid.Row="1" >
+        <Button Command="{Binding EditCommand}" Grid.Column ="0" Grid.Row="1" Content="Edit Tour" HorizontalContentAlignment="Left" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
+        <Button Command="{Binding PDFCommand}" Grid.Column ="1" Grid.Row="1" Content="Single Report" HorizontalContentAlignment="Left" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
+        <Button Command="{Binding PDFCommand}" Grid.Column ="2" Grid.Row="1" Content="Summarize Report" HorizontalContentAlignment="Left" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
+        <Menu Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial" Grid.Column ="3" Grid.Row="1" >
             <MenuItem Width="180" Height="30" FontFamily="Arial" >
-                <MenuItem.Header  >
-                    <TextBlock Text="Header" />
+                <MenuItem.Header>
+                    <TextBlock Text="Export/Import" />
                 </MenuItem.Header>
                 <MenuItem Command="{Binding ExportCommand}"  Header="_Export" />
                 <MenuItem Command="{Binding ImportCommand}"  Header="_Import" />
@@ -50,21 +50,27 @@
             <TextBlock Margin="5" Text="{Binding SelectedItem.tourDescription, StringFormat='Description: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.from, StringFormat='Start: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.to, StringFormat='Destination: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
+            <TextBlock Margin="5" Text="{Binding SelectedItem.transportType, StringFormat='Transport-type: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.tourDistance, StringFormat='Distance: {0} km', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
-            <TextBlock Margin="5" Text="{Binding SelectedItem.estimatedTime, StringFormat='Estimated Time of Arrival: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
-
-
-            <StackPanel HorizontalAlignment="Center" Height="auto" Margin="0,50,2,35" Orientation="Horizontal" VerticalAlignment="Bottom" Visibility="{Binding CurrentTour, TargetNullValue=Collapsed}">
-
-                <Button Margin="5" Command="{Binding AddCommand}"  Content="+"  HorizontalAlignment="Left" Height="30" Width="30" Background="DodgerBlue" BorderBrush="DarkBlue"/>
-                <Button Margin="5" Command="{Binding DeleteCommand}" Content="-" HorizontalAlignment="Right" Width="30" Background="DodgerBlue" BorderBrush="DarkBlue"/>
-                <Button Margin="5" DockPanel.Dock="Bottom" Height="30" x:Name="btnOne" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="30" Background="DodgerBlue" BorderBrush="DarkBlue">
-                    <Image Source="/img/EditIcon.png"/>
-                </Button>
-            </StackPanel>
+            <TextBlock Margin="5" Text="{Binding SelectedItem.estimatedTime, StringFormat='ETA: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
+            <TextBlock Margin="5" Text="{Binding SelectedItem.caloriefuel, StringFormat='Burned fuel/calories: {0} L/cal', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
 
 
 
+
+
+
+
+
+        </StackPanel>
+        <StackPanel Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="1" HorizontalAlignment="Center" Height="auto" Orientation="Horizontal" VerticalAlignment="Top" Visibility="{Binding CurrentTour, TargetNullValue=Collapsed}">
+
+            <TextBlock Margin="5" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3">Tour-Logs</TextBlock>
+            <Button Margin="5" Command="{Binding AddLogCommand}"  Content="+"  HorizontalAlignment="Left" Height="30" Width="30" Background="DodgerBlue" BorderBrush="DarkBlue"/>
+            <Button Margin="5" Command="{Binding DeleteLogCommand}" Content="-" HorizontalAlignment="Right" Width="30" Background="DodgerBlue" BorderBrush="DarkBlue"/>
+            <Button Margin="5" Command="{Binding EditLogCommand}" DockPanel.Dock="Bottom" Height="30" x:Name="btnOne" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="30" Background="DodgerBlue" BorderBrush="DarkBlue">
+                <Image Source="/img/EditIcon.png"/>
+            </Button>
 
 
         </StackPanel>
@@ -72,7 +78,7 @@
             <Image Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" Width="auto" Height="auto" Source="{Binding SelectedItem.imagePath, ElementName=TourListBox}"></Image>
         </Border>
 
-        <ListBox Grid.Row="4" Grid.RowSpan="3" x:Name="TourListBox" 
+        <ListBox Grid.Row="4" Grid.RowSpan="2" x:Name="TourListBox" 
                  ItemsSource="{Binding TourItems, Mode=TwoWay}" 
                  SelectedItem="{Binding CurrentTour, Mode=TwoWay}">
             <ListBox.ItemTemplate>
@@ -83,7 +89,14 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <ListBox Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="1" x:Name="TourLogListBox" 
+        <StackPanel VerticalAlignment="Top" Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="1">
+            <DockPanel LastChildFill="True">
+                <Button Command="{Binding SearchLogsCommand}" HorizontalAlignment="Left" Height="25" Width="25" Grid.Column="3" Grid.Row="2">
+                    <Image Source="/img/SearchIcon.png" />
+                </Button>
+                <TextBox Text="{Binding SearchTextLog}" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Height="25" TextWrapping="Wrap"/>
+            </DockPanel>
+            <ListBox  x:Name="TourLogListBox" 
                  ItemsSource="{Binding TourLogItems, Mode=TwoWay}" 
                  SelectedItem="{Binding CurrentTourLog, Mode=TwoWay}">
             <ListBox.ItemTemplate>
@@ -94,6 +107,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        </StackPanel>
         <StackPanel Margin="5" Orientation="Vertical" Grid.Column="2" Grid.Row="6" Grid.ColumnSpan="2">
             <TextBlock Margin="5" Text="{Binding SelectedItem.l_comment, StringFormat='Comment: {0}', ElementName=TourLogListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.l_difficulty, StringFormat='Difficulty: {0}', ElementName=TourLogListBox}" TextWrapping="Wrap" Background="White"/>

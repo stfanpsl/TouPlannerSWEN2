@@ -17,6 +17,12 @@ namespace TourPlannerSemesterProjekt.Business
 
         public void EditTour(TourObjekt newtour);
 
+        public void AddNewTourLog(TourLogObjekt newtourlog);
+
+        public void DeleteTourLog(TourLogObjekt tourlog);
+
+        public void EditTourLog(TourLogObjekt newtourlog);
+
         public void GeneratePdf(TourObjekt newtour);
         //JUST FOR TESTING: needs to be divided up to DAL (FileAccess) and own BL-Class (IO/JSON-Service)
         public void ExportTour(TourObjekt tour);

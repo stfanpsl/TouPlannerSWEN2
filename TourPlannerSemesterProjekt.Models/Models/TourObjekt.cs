@@ -22,6 +22,8 @@ namespace TourPlannerSemesterProjekt.Models
         public string imagePath { get; set; }
         public string estimatedTime { get; set; }
 
+        public double caloriefuel { get; set; }
+
         public TourObjekt(int id,
                           string name,
                           string tourDescription,

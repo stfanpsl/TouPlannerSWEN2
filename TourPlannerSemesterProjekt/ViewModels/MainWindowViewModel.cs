@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using TourPlannerSemesterProjekt.Business;
 using System.Windows.Input;
 using Microsoft.Win32;
+using TourPlannerSemesterProjekt.Views;
 
 namespace TourPlannerSemesterProjekt.ViewModels
 {
@@ -60,6 +61,15 @@ namespace TourPlannerSemesterProjekt.ViewModels
         private ICommand _editCommand;
         public ICommand EditCommand => _editCommand ??= new RelayCommand(UpdateTour);
 
+        private ICommand _addLogCommand;
+        public ICommand AddLogCommand => _addLogCommand ??= new RelayCommand(AddTourLog);
+
+        private ICommand _deleteLogCommand;
+        public ICommand DeleteLogCommand => _deleteLogCommand ??= new RelayCommand(DeleteTourLog);
+
+        private ICommand _editLogCommand;
+        public ICommand EditLogCommand => _editLogCommand ??= new RelayCommand(UpdateTourLog);
+
         private ICommand _pdfCommand;
         public ICommand PDFCommand => _pdfCommand ??= new RelayCommand(PrintPdf);
 
@@ -71,6 +81,9 @@ namespace TourPlannerSemesterProjekt.ViewModels
 
         private ICommand _searchCommand;
         public ICommand SearchCommand => _searchCommand ??= new RelayCommand(SearchTours);
+
+        private ICommand _searchLogsCommand;
+        public ICommand SearchLogsCommand => _searchLogsCommand ??= new RelayCommand(SearchTourLogs);
 
 
         private TourObjekt _currentTour;
@@ -165,10 +178,22 @@ namespace TourPlannerSemesterProjekt.ViewModels
             TourLogItems = new ObservableCollection<TourLogObjekt>(_tourservice.GetTourLogs(tour));
         }
 
+        public void RefreshTourLogs()
+        {
+            CurrentTour.tourlogs = _tourservice.GetTourLogs(CurrentTour);
+            TourLogItems = new ObservableCollection<TourLogObjekt>(_tourservice.GetTourLogs(CurrentTour));
+        }
+
         public void SearchTours(object commandParameter)
         {
             TourItems.Clear();
             TourItems = new ObservableCollection<TourObjekt>(_tourservice.GetTours(SearchText));
+        }
+
+        public void SearchTourLogs(object commandParameter)
+        {
+            CurrentTour.tourlogs = _tourservice.GetTourLogs(CurrentTour);
+            TourLogItems = new ObservableCollection<TourLogObjekt>(_tourservice.GetTourLogs(CurrentTour, SearchTextLog));
         }
 
 
@@ -221,6 +246,30 @@ namespace TourPlannerSemesterProjekt.ViewModels
                 _tourservice.DeleteTour(delTour);
 
                 CurrentTour = null;
+            }
+        }
+
+        private void AddTourLog(object commandParameter)
+        {
+            TourLogAdministration addTourWindow = new TourLogAdministration(this, CurrentTour.id);
+            addTourWindow.Show();
+        }
+
+        private void UpdateTourLog(object commandParameter)
+        {
+            TourLogAdministration addTourWindow = new TourLogAdministration(this, CurrentTourLog);
+            addTourWindow.Show();
+        }
+
+        private void DeleteTourLog(object commandParameter)
+        {
+            if (CurrentTourLog != null)
+            {
+                var delTourLog = CurrentTourLog;
+                TourLogItems.Remove(CurrentTourLog);
+                _tourservice.DeleteTourLog(delTourLog);
+
+                CurrentTourLog = null;
             }
         }
 
