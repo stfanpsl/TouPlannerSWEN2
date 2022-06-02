@@ -23,6 +23,8 @@ namespace TourPlannerSemesterProjekt.Business
 
         public void EditTourLog(TourLogObjekt newtourlog);
 
+        public double GetFuelorCalories(TourObjekt tour);
+
         public void GeneratePdf(TourObjekt newtour);
         //JUST FOR TESTING: needs to be divided up to DAL (FileAccess) and own BL-Class (IO/JSON-Service)
         public void ExportTour(TourObjekt tour);

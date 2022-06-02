@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
@@ -11,12 +12,15 @@ namespace TourPlannerSemesterProjekt.DataAccess
 {
     public class TourPlannerFileAccess
     {
-        private readonly string _filePath = ConfigurationManager.AppSettings["ImagePath"];
+
+        IConfiguration config = new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json", false, true)
+        .Build();
 
         public string SaveImage(Image image)
         {
             var fileName = System.IO.Path.GetRandomFileName() + ".jpg";
-            var fullFilePath = _filePath + fileName;
+            var fullFilePath = config["ImagePath"] + fileName;
 
             image.Save(fullFilePath, ImageFormat.Jpeg);
 

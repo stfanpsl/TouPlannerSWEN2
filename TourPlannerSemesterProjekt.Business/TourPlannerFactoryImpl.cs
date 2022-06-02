@@ -73,22 +73,10 @@ namespace TourPlannerSemesterProjekt.Business
             string imagePath = _mapQuestService.GetImage();
             double tourDistance = _mapQuestService.GetRouteDistance();
             string arrivalTime = _mapQuestService.GetArrivalTime();
-            double caloriefuel = 0;
-            switch (newtour.transportType)
-            {
-                case "By Car":
-                caloriefuel = (tourDistance * 0.077);
-                break;
-                case "By Bike":
-                caloriefuel = (tourDistance * 62);
-                break;
-                case "On Foot":
-                caloriefuel = (tourDistance * 23);
-                break;
-            }
 
-            newtour.caloriefuel = Math.Round(caloriefuel, 2);
+
             newtour.tourDistance = Math.Round(tourDistance, 2);
+            newtour.caloriefuel = GetFuelorCalories(newtour);
             newtour.estimatedTime = arrivalTime;
             newtour.imagePath = imagePath;
 
@@ -101,6 +89,25 @@ namespace TourPlannerSemesterProjekt.Business
                 Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
                 throw new NpgsqlException("Error in database occurred.", ex);
             }
+        }
+
+        public double GetFuelorCalories(TourObjekt tour)
+        {
+            double caloriefuel = 0;
+            switch (tour.transportType)
+            {
+                case "By Car":
+                    caloriefuel = (tour.tourDistance * 0.077);
+                    break;
+                case "By Bike":
+                    caloriefuel = (tour.tourDistance * 62);
+                    break;
+                case "On Foot":
+                    caloriefuel = (tour.tourDistance * 23);
+                    break;
+            }
+
+            return Math.Round(caloriefuel, 2);
         }
 
         public bool CheckTour(TourObjekt newtour)
@@ -120,21 +127,8 @@ namespace TourPlannerSemesterProjekt.Business
         {
             try
             {
-                double caloriefuel = 0;
-                switch (newtour.transportType)
-                {
-                    case "By Car":
-                        caloriefuel = (newtour.tourDistance * 0.077);
-                        break;
-                    case "By Bike":
-                        caloriefuel = (newtour.tourDistance * 62);
-                        break;
-                    case "On Foot":
-                        caloriefuel = (newtour.tourDistance * 23);
-                        break;
-                }
 
-                newtour.caloriefuel = Math.Round(caloriefuel, 2);
+                newtour.caloriefuel = GetFuelorCalories(newtour);
 
                 _dBAccess.EditTour(newtour);
             }

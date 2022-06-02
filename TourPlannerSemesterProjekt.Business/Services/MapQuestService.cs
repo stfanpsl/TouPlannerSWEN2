@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using TourPlannerSemesterProjekt.Logging;
 using TourPlannerSemesterProjekt.DataAccess;
+using Microsoft.Extensions.Configuration;
 
 namespace TourPlannerSemesterProjekt.Business.Services
 {
@@ -26,10 +27,13 @@ namespace TourPlannerSemesterProjekt.Business.Services
 
         public MapQuestService(string fromLocation, string toLocation)
         {
+            IConfiguration config = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", false, true)
+            .Build();
             _baseUrl = "https://www.mapquestapi.com";
             _client = new HttpClient();
-            _apiKey = ConfigurationManager.AppSettings["MapQuestKey"];
-            _filePath = ConfigurationManager.AppSettings["ImagePath"];
+            _apiKey = config["MapQuestKey"];
+            _filePath = config["ImagePath"];
             _routeData = GetRoute(fromLocation, toLocation);
         }
 

@@ -21,16 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TourPlannerSemesterProjekt"
 		{D3500582-59F6-43F3-B5F0-87CB0AABCBE3} = {D3500582-59F6-43F3-B5F0-87CB0AABCBE3}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TourPlannerSemesterProjekt.UnitTests", "..\TourPlannerSemesterProjekt.UnitTests\TourPlannerSemesterProjekt.UnitTests.csproj", "{9862F148-3D0C-4FED-B05D-55CA64780D6C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{5552423C-DCF6-4BB7-9385-45AD5FBE9D3B} = {5552423C-DCF6-4BB7-9385-45AD5FBE9D3B}
-		{D3500582-59F6-43F3-B5F0-87CB0AABCBE3} = {D3500582-59F6-43F3-B5F0-87CB0AABCBE3}
-		{EC5EA9AF-4F2A-4B21-97AB-61860A4128A8} = {EC5EA9AF-4F2A-4B21-97AB-61860A4128A8}
-		{EABC82C1-A74E-4C20-AEAA-22E000E91631} = {EABC82C1-A74E-4C20-AEAA-22E000E91631}
-		{DC147DE1-256A-4343-A099-9748A828158C} = {DC147DE1-256A-4343-A099-9748A828158C}
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TourPlannerSemesterProjekt.Logging", "..\TourPlannerSemesterProjekt.Logging\TourPlannerSemesterProjekt.Logging.csproj", "{D3500582-59F6-43F3-B5F0-87CB0AABCBE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TourPlannerSemesterProjekt.UnitTests", "..\TourPlannerSemesterProjekt.UnitTests\TourPlannerSemesterProjekt.UnitTests.csproj", "{CBD0666F-61F3-4AB7-BA05-5D77FE157CC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,14 +47,14 @@ Global
 		{DC147DE1-256A-4343-A099-9748A828158C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC147DE1-256A-4343-A099-9748A828158C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC147DE1-256A-4343-A099-9748A828158C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9862F148-3D0C-4FED-B05D-55CA64780D6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9862F148-3D0C-4FED-B05D-55CA64780D6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9862F148-3D0C-4FED-B05D-55CA64780D6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9862F148-3D0C-4FED-B05D-55CA64780D6C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D3500582-59F6-43F3-B5F0-87CB0AABCBE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D3500582-59F6-43F3-B5F0-87CB0AABCBE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3500582-59F6-43F3-B5F0-87CB0AABCBE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3500582-59F6-43F3-B5F0-87CB0AABCBE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBD0666F-61F3-4AB7-BA05-5D77FE157CC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBD0666F-61F3-4AB7-BA05-5D77FE157CC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBD0666F-61F3-4AB7-BA05-5D77FE157CC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBD0666F-61F3-4AB7-BA05-5D77FE157CC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

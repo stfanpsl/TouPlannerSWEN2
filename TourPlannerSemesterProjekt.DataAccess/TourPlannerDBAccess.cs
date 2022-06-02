@@ -8,14 +8,12 @@ using System.Threading.Tasks;
 using Npgsql;
 using TourPlannerSemesterProjekt.Models;
 using System.Data.Common;
+using Microsoft.Extensions.Configuration;
 
 namespace TourPlannerSemesterProjekt.DataAccess
 {
     public class TourPlannerDBAccess : ITourPlannerDBAccess
     {
-        private string _connectionString = ConfigurationManager.ConnectionStrings["Test"].ConnectionString;
-
-
         private const string SQL_GET_ALL_TOURS = "SELECT * FROM tour";
 
         private const string SQL_SEARCH_TOURS = "SELECT * FROM tour WHERE LOWER(\"name\") LIKE LOWER(@nname)";
@@ -41,9 +39,12 @@ namespace TourPlannerSemesterProjekt.DataAccess
 
         public static TourPlannerDBAccess GetInstance()
         {
+
             _instance ??= new Lazy<TourPlannerDBAccess>(() => new TourPlannerDBAccess());
 
             return _instance.Value;
+
+
         }
 
         public List<TourObjekt> GetTours(string searchText = "")
@@ -337,7 +338,13 @@ namespace TourPlannerSemesterProjekt.DataAccess
 
         private NpgsqlConnection CreateOpenConnection()
         {
-            NpgsqlConnection connection = new NpgsqlConnection(this._connectionString);
+            IConfiguration config = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", false, true)
+            .Build();
+
+            string connectionString = config["connectionString"];
+
+            NpgsqlConnection connection = new NpgsqlConnection(connectionString);
             connection.Open();
 
             return connection;
