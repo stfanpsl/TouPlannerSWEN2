@@ -19,10 +19,10 @@ namespace TourPlannerSemesterProjekt.Business.Services
             _dBAccess = repository;
         }
 
-        public void OpenFile(string path)
+        /*public void OpenFile(string path)
         {
 
-        }
+        }*/
 
         public void ExportTour(TourObjekt tour)
         {
@@ -34,7 +34,6 @@ namespace TourPlannerSemesterProjekt.Business.Services
             }
         }
 
-        //JUST FOR TESTING: needs to be divided up to DAL (FileAccess) and own BL-Class (IO/JSON-Service)
         public void ImportTour(string filePath)
         {
             using (StreamReader file = File.OpenText(filePath))

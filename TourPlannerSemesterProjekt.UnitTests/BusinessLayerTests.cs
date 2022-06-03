@@ -1,6 +1,7 @@
 using Moq;
 using NUnit.Framework;
 using System;
+using System.IO;
 using TourPlannerSemesterProjekt.Business;
 using TourPlannerSemesterProjekt.Business.Services;
 using TourPlannerSemesterProjekt.Models;
@@ -68,5 +69,65 @@ namespace TourPlannerSemesterProjekt.UnitTests
             testTour.transportType = "On Foot";
             Assert.AreEqual(expectedCalsBurnt, _tourService.GetFuelorCalories(testTour));
         }
+
+        [Test]
+        public void ExportTest()
+        {
+            var testTour = new TourObjekt
+            {
+                name = "Test 1",
+                tourDescription = "Desc. 1",
+                from = "Wien",
+                to = "Linz",
+                estimatedTime = "10:00:00",
+                routeInformation = "Info 1",
+                transportType = "By Car",
+                tourDistance = 100
+            };
+
+            string expectedFilename = "./" + testTour.name + ".json";
+
+            JSONService _jsonService = new JSONService();
+            
+            _jsonService.ExportTour(testTour);
+
+            FileAssert.Exists(expectedFilename);
+
+            //cleanup
+            if (File.Exists(expectedFilename)) { 
+                File.Delete(expectedFilename);
+            }
+        }
+
+
+        /*[Test]
+        public void ImportTest()
+        {
+            var testTour = new TourObjekt
+            {
+                name = "Test 1",
+                tourDescription = "Desc. 1",
+                from = "Wien",
+                to = "Linz",
+                estimatedTime = "10:00:00",
+                routeInformation = "Info 1",
+                transportType = "By Car",
+                tourDistance = 100
+            };
+
+            string expectedFilename = "./" + testTour.name + ".json";
+
+            JSONService _jsonService = new JSONService();
+
+            _jsonService.ExportTour(testTour);
+
+            FileAssert.Exists(expectedFilename);
+
+            //cleanup
+            if (File.Exists(expectedFilename))
+            {
+                File.Delete(expectedFilename);
+            }
+        }*/
     }
 }
