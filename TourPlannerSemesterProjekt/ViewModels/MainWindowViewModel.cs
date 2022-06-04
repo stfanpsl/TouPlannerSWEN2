@@ -56,19 +56,19 @@ namespace TourPlannerSemesterProjekt.ViewModels
         public ICommand AddCommand => _addCommand ??= new RelayCommand(AddTour);
 
         private ICommand _deleteCommand;
-        public ICommand DeleteCommand => _deleteCommand ??= new RelayCommand(DeleteTour);
+        public ICommand DeleteCommand => _deleteCommand ??= new RelayCommand(DeleteTour, canExecuteTourCommand);
 
         private ICommand _editCommand;
-        public ICommand EditCommand => _editCommand ??= new RelayCommand(UpdateTour);
+        public ICommand EditCommand => _editCommand ??= new RelayCommand(UpdateTour, canExecuteTourCommand);
 
         private ICommand _addLogCommand;
         public ICommand AddLogCommand => _addLogCommand ??= new RelayCommand(AddTourLog);
 
         private ICommand _deleteLogCommand;
-        public ICommand DeleteLogCommand => _deleteLogCommand ??= new RelayCommand(DeleteTourLog);
+        public ICommand DeleteLogCommand => _deleteLogCommand ??= new RelayCommand(DeleteTourLog, canExecuteTourLogCommand);
 
         private ICommand _editLogCommand;
-        public ICommand EditLogCommand => _editLogCommand ??= new RelayCommand(UpdateTourLog);
+        public ICommand EditLogCommand => _editLogCommand ??= new RelayCommand(UpdateTourLog, canExecuteTourLogCommand);
 
         private ICommand _pdfCommand;
         public ICommand PDFCommand => _pdfCommand ??= new RelayCommand(PrintPdf);
@@ -80,10 +80,10 @@ namespace TourPlannerSemesterProjekt.ViewModels
         public ICommand ImportCommand => _importCommand ??= new RelayCommand(ImportTour);
 
         private ICommand _searchCommand;
-        public ICommand SearchCommand => _searchCommand ??= new RelayCommand(SearchTours);
+        public ICommand SearchCommand => _searchCommand ??= new RelayCommand(SearchTours, canExecuteTourSearchCommand);
 
         private ICommand _searchLogsCommand;
-        public ICommand SearchLogsCommand => _searchLogsCommand ??= new RelayCommand(SearchTourLogs);
+        public ICommand SearchLogsCommand => _searchLogsCommand ??= new RelayCommand(SearchTourLogs, canExecuteTourSearchCommand);
 
 
         private TourObjekt _currentTour;
@@ -205,8 +205,11 @@ namespace TourPlannerSemesterProjekt.ViewModels
 
         private void UpdateTour(object commandParameter)
         {
-            TourAdministration addTourWindow = new TourAdministration(this, CurrentTour);
-            addTourWindow.Show();
+            if (CurrentTour != null)
+            {
+                TourAdministration addTourWindow = new TourAdministration(this, CurrentTour);
+                addTourWindow.Show();
+            }
         }
 
 
@@ -257,8 +260,11 @@ namespace TourPlannerSemesterProjekt.ViewModels
 
         private void UpdateTourLog(object commandParameter)
         {
-            TourLogAdministration addTourWindow = new TourLogAdministration(this, CurrentTourLog);
-            addTourWindow.Show();
+            if(CurrentTourLog != null)
+            {
+                TourLogAdministration addTourWindow = new TourLogAdministration(this, CurrentTourLog);
+                addTourWindow.Show();
+            }
         }
 
         private void DeleteTourLog(object commandParameter)
@@ -270,6 +276,56 @@ namespace TourPlannerSemesterProjekt.ViewModels
                 _tourservice.DeleteTourLog(delTourLog);
 
                 CurrentTourLog = null;
+            }
+        }
+
+
+        //Helper Methods for Commands
+        private bool canExecuteTourCommand(object commandParameter)
+        {
+            if (CurrentTour == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        private bool canExecuteTourLogCommand(object commandParameter)
+        {
+            if (CurrentTourLog == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        private bool canExecuteTourSearchCommand(object commandParameter)
+        {
+            if (SearchText == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        private bool canExecuteTourLogSearchCommand(object commandParameter)
+        {
+            if (SearchTextLog == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
 
