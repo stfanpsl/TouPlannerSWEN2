@@ -1,25 +1,57 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Win32;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using TourPlannerSemesterProjekt.ViewModels;
-using System.Web;
-using TourPlannerSemesterProjekt.Models;
-using TourPlannerSemesterProjekt.DataAccess;
-using System.Collections.ObjectModel;
-using TourPlannerSemesterProjekt.Business;
 using System.Windows.Input;
-using Microsoft.Win32;
+using TourPlannerSemesterProjekt.Business;
+using TourPlannerSemesterProjekt.Models;
 using TourPlannerSemesterProjekt.Views;
 
 namespace TourPlannerSemesterProjekt.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {
+        private ITourPlannerFactory _tourservice;
+
+        private ICommand _addCommand;
+        public ICommand AddCommand => _addCommand ??= new RelayCommand(AddTour);
+
+        private ICommand _deleteCommand;
+        public ICommand DeleteCommand => _deleteCommand ??= new RelayCommand(DeleteTour, canExecuteTourCommand);
+
+        private ICommand _editCommand;
+        public ICommand EditCommand => _editCommand ??= new RelayCommand(UpdateTour, canExecuteTourCommand);
+
+        private ICommand _addLogCommand;
+        public ICommand AddLogCommand => _addLogCommand ??= new RelayCommand(AddTourLog);
+
+        private ICommand _deleteLogCommand;
+        public ICommand DeleteLogCommand => _deleteLogCommand ??= new RelayCommand(DeleteTourLog, canExecuteTourLogCommand);
+
+        private ICommand _editLogCommand;
+        public ICommand EditLogCommand => _editLogCommand ??= new RelayCommand(UpdateTourLog, canExecuteTourLogCommand);
+
+        private ICommand _pdfCommand;
+        public ICommand PDFCommand => _pdfCommand ??= new RelayCommand(PrintPdf, canExecuteTourCommand);
+
+        private ICommand _pdfSumCommand;
+        public ICommand PDFSumCommand => _pdfSumCommand ??= new RelayCommand(PrintSumPdf, canExecuteSummaryCommand);
+
+        private ICommand _exportCommand;
+        public ICommand ExportCommand => _exportCommand ??= new RelayCommand(ExportTour, canExecuteTourCommand);
+
+        private ICommand _importCommand;
+        public ICommand ImportCommand => _importCommand ??= new RelayCommand(ImportTour);
+
+        private ICommand _searchCommand;
+        public ICommand SearchCommand => _searchCommand ??= new RelayCommand(SearchTours);
+
+        private ICommand _searchLogsCommand;
+        public ICommand SearchLogsCommand => _searchLogsCommand ??= new RelayCommand(SearchTourLogs);
+
 
         private ObservableCollection<TourObjekt> _tourItems;
         public ObservableCollection<TourObjekt> TourItems
@@ -49,42 +81,6 @@ namespace TourPlannerSemesterProjekt.ViewModels
             }
         }
 
-        private ITourPlannerFactory _tourservice;
-
-        //Should probably create a Command Class now that there are this many...
-        private ICommand _addCommand;
-        public ICommand AddCommand => _addCommand ??= new RelayCommand(AddTour);
-
-        private ICommand _deleteCommand;
-        public ICommand DeleteCommand => _deleteCommand ??= new RelayCommand(DeleteTour, canExecuteTourCommand);
-
-        private ICommand _editCommand;
-        public ICommand EditCommand => _editCommand ??= new RelayCommand(UpdateTour, canExecuteTourCommand);
-
-        private ICommand _addLogCommand;
-        public ICommand AddLogCommand => _addLogCommand ??= new RelayCommand(AddTourLog);
-
-        private ICommand _deleteLogCommand;
-        public ICommand DeleteLogCommand => _deleteLogCommand ??= new RelayCommand(DeleteTourLog, canExecuteTourLogCommand);
-
-        private ICommand _editLogCommand;
-        public ICommand EditLogCommand => _editLogCommand ??= new RelayCommand(UpdateTourLog, canExecuteTourLogCommand);
-
-        private ICommand _pdfCommand;
-        public ICommand PDFCommand => _pdfCommand ??= new RelayCommand(PrintPdf);
-
-        private ICommand _exportCommand;
-        public ICommand ExportCommand => _exportCommand ??= new RelayCommand(ExportTour);
-
-        private ICommand _importCommand;
-        public ICommand ImportCommand => _importCommand ??= new RelayCommand(ImportTour);
-
-        private ICommand _searchCommand;
-        public ICommand SearchCommand => _searchCommand ??= new RelayCommand(SearchTours, canExecuteTourSearchCommand);
-
-        private ICommand _searchLogsCommand;
-        public ICommand SearchLogsCommand => _searchLogsCommand ??= new RelayCommand(SearchTourLogs, canExecuteTourSearchCommand);
-
 
         private TourObjekt _currentTour;
 
@@ -104,7 +100,7 @@ namespace TourPlannerSemesterProjekt.ViewModels
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
-            if(CurrentTour != null)
+            if (CurrentTour != null)
             {
                 GetTourLogs(CurrentTour);
             }
@@ -159,6 +155,10 @@ namespace TourPlannerSemesterProjekt.ViewModels
                 }
             }
         }
+
+        IConfiguration config = new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json", false, true)
+        .Build();
 
         public MainWindowViewModel()
         {
@@ -216,19 +216,30 @@ namespace TourPlannerSemesterProjekt.ViewModels
         private void PrintPdf(object commandParameter)
         {
             _tourservice.GeneratePdf(CurrentTour);
-            MessageBox.Show("Your printed report can be found in the root folder of your installation.", "PDF Generation done");
+            MessageBox.Show("Your printed report can be found in " + config["filePath"], "PDF Generation done");
+        }
+
+        private void PrintSumPdf(object commandParameter)
+        {
+            List<TourObjekt> pdftours = new List<TourObjekt>();
+            foreach (TourObjekt tour in _tourservice.GetTours())
+            {
+                tour.tourlogs = _tourservice.GetTourLogs(tour);
+                pdftours.Add(tour);
+            }
+            _tourservice.GenerateSumPdf(pdftours);
+            MessageBox.Show("Your printed summary report can be found in " + config["filePath"], "PDF Generation done");
         }
 
         private void ExportTour(object commandParameter)
         {
-            if(CurrentTour != null)
+            if (CurrentTour != null)
             {
                 _tourservice.ExportTour(CurrentTour);
-                MessageBox.Show("Your exported report can be found in the root folder of your installation.", "Export done");
+                MessageBox.Show("Your exported report can be found in " + config["filePath"], "Export done");
             }
         }
 
-        //Add File Upload Control to View
         private void ImportTour(object commandParameter)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -260,7 +271,7 @@ namespace TourPlannerSemesterProjekt.ViewModels
 
         private void UpdateTourLog(object commandParameter)
         {
-            if(CurrentTourLog != null)
+            if (CurrentTourLog != null)
             {
                 TourLogAdministration addTourWindow = new TourLogAdministration(this, CurrentTourLog);
                 addTourWindow.Show();
@@ -305,21 +316,10 @@ namespace TourPlannerSemesterProjekt.ViewModels
             }
         }
 
-        private bool canExecuteTourSearchCommand(object commandParameter)
-        {
-            if (SearchText == null)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
 
-        private bool canExecuteTourLogSearchCommand(object commandParameter)
+        private bool canExecuteSummaryCommand(object commandParameter)
         {
-            if (SearchTextLog == null)
+            if (!TourItems.Any())
             {
                 return false;
             }

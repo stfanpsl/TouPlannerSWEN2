@@ -10,7 +10,7 @@
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
-    <Grid ShowGridLines="True">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
@@ -31,7 +31,7 @@
         <Label Grid.Column="0" Grid.Row="0" Background="LightBlue"  Grid.ColumnSpan="4">Tour - Planner</Label>
         <Button Command="{Binding EditCommand}" Grid.Column ="0" Grid.Row="1" Content="Edit Tour" HorizontalContentAlignment="Left" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
         <Button Command="{Binding PDFCommand}" Grid.Column ="1" Grid.Row="1" Content="Single Report" HorizontalContentAlignment="Left" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
-        <Button Command="{Binding PDFCommand}" Grid.Column ="2" Grid.Row="1" Content="Summarize Report" HorizontalContentAlignment="Left" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
+        <Button Command="{Binding PDFSumCommand}" Grid.Column ="2" Grid.Row="1" Content="Summary Report" HorizontalContentAlignment="Left" HorizontalAlignment="Center" Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial"/>
         <Menu Background="#FF64BBAD" Width="180" Height="30" FontFamily="Arial" Grid.Column ="3" Grid.Row="1" >
             <MenuItem Width="180" Height="30" FontFamily="Arial" >
                 <MenuItem.Header>
@@ -54,13 +54,6 @@
             <TextBlock Margin="5" Text="{Binding SelectedItem.tourDistance, StringFormat='Distance: {0} km', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.estimatedTime, StringFormat='ETA: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.caloriefuel, StringFormat='Burned fuel/calories: {0} L/cal', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
-
-
-
-
-
-
-
 
         </StackPanel>
         <StackPanel Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="1" HorizontalAlignment="Center" Height="auto" Orientation="Horizontal" VerticalAlignment="Top" Visibility="{Binding CurrentTour, TargetNullValue=Collapsed}">
@@ -99,14 +92,14 @@
             <ListBox  x:Name="TourLogListBox" 
                  ItemsSource="{Binding TourLogItems, Mode=TwoWay}" 
                  SelectedItem="{Binding CurrentTourLog, Mode=TwoWay}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="{Binding l_date}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding l_date}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </StackPanel>
         <StackPanel Margin="5" Orientation="Vertical" Grid.Column="2" Grid.Row="6" Grid.ColumnSpan="2">
             <TextBlock Margin="5" Text="{Binding SelectedItem.l_comment, StringFormat='Comment: {0}', ElementName=TourLogListBox}" TextWrapping="Wrap" Background="White"/>

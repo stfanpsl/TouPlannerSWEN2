@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=local:TourLogAdministrationViewModel}"
         Title="TourLogAdministration" Height="600" Width="800">
-    <Grid ShowGridLines="False">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
@@ -28,8 +28,6 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
-
-
         </Grid.RowDefinitions>
 
         <Label FontWeight="Bold" Grid.Column="0" Grid.Row="0" Background="LightBlue"  Grid.ColumnSpan="4">Tour Planner</Label>
@@ -37,7 +35,7 @@
         <Label FontWeight="Bold" Grid.Column="1" Grid.Row="1" Background="WhiteSmoke"  Grid.ColumnSpan="2">Datetime</Label>
         <DatePicker SelectedDate="{Binding CurrentItem.l_date}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"  Width="600" ></DatePicker>
         <Label FontWeight="Bold" Grid.Column="1" Grid.Row="3" Background="WhiteSmoke"  Grid.ColumnSpan="2">Comment</Label>
-        <TextBox Text="{Binding CurrentItem.l_comment}" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" TextWrapping="NoWrap"></TextBox>
+        <TextBox Text="{Binding CurrentItem.l_comment,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" TextWrapping="NoWrap"></TextBox>
         <Label FontWeight="Bold" Grid.Column="1" Grid.Row="5" Background="WhiteSmoke"  Grid.ColumnSpan="2">Difficulty</Label>
         <ComboBox SelectedValue="{Binding CurrentItem.l_difficulty}" SelectedValuePath="Content" VerticalAlignment="Center" Height="45"  Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2">
             <ComboBoxItem Content="Easy" />
@@ -46,7 +44,7 @@
         </ComboBox>
 
         <Label FontWeight="Bold" Grid.Column="1" Grid.Row="7" Background="WhiteSmoke"  Grid.ColumnSpan="2">Total Time</Label>
-        <TextBox Text="{Binding CurrentItem.l_totaltime}" Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="2" Width="600" TextWrapping="NoWrap" ></TextBox>
+        <TextBox Text="{Binding CurrentItem.l_totaltime,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="2" Width="600" TextWrapping="NoWrap" ></TextBox>
         <Label FontWeight="Bold" Grid.Column="1" Grid.Row="9" Background="WhiteSmoke"  Grid.ColumnSpan="2">Rating</Label>
         <ComboBox SelectedValue="{Binding CurrentItem.l_rating}" SelectedValuePath="Content" VerticalAlignment="Center" Height="45" Grid.Column="1" Grid.Row="10" Grid.ColumnSpan="2">
             <ComboBoxItem Content="1" />

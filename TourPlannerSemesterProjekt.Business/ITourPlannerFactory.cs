@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using TourPlannerSemesterProjekt.Models;
+﻿using TourPlannerSemesterProjekt.Models;
 
 namespace TourPlannerSemesterProjekt.Business
 {
@@ -26,9 +25,10 @@ namespace TourPlannerSemesterProjekt.Business
         public double GetFuelorCalories(TourObjekt tour);
 
         public void GeneratePdf(TourObjekt newtour);
-        //JUST FOR TESTING: needs to be divided up to DAL (FileAccess) and own BL-Class (IO/JSON-Service)
+
+        public void GenerateSumPdf(List<TourObjekt> tours);
+
         public void ExportTour(TourObjekt tour);
-        //JUST FOR TESTING: needs to be divided up to DAL (FileAccess) and own BL-Class (IO/JSON-Service)
         public void ImportTour(string FilePath);
     }
 }

@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Npgsql;
-using TourPlannerSemesterProjekt.Models;
-using TourPlannerSemesterProjekt.DataAccess;
-using TourPlannerSemesterProjekt.Business.Services;
+﻿using Npgsql;
 using System.Diagnostics;
-using Newtonsoft.Json;
+using TourPlannerSemesterProjekt.Business.Services;
+using TourPlannerSemesterProjekt.DataAccess;
+using TourPlannerSemesterProjekt.Logging;
+using TourPlannerSemesterProjekt.Models;
 
 namespace TourPlannerSemesterProjekt.Business
 {
     public class TourPlannerFactoryImpl : ITourPlannerFactory
     {
         private ITourPlannerDBAccess _dBAccess;
+
+        private static ILoggerWrapper logger = LoggerFactory.GetLogger();
 
         public TourPlannerFactoryImpl()
         {
@@ -37,10 +34,10 @@ namespace TourPlannerSemesterProjekt.Business
                 }
                 return allTours;
             }
-            catch (NpgsqlException ex)
+            catch (Exception ex)
             {
-                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
-                throw new NpgsqlException("Error in database occurred.", ex);
+                logger.Fatal("Tours could not be loaded. Exception: " + ex);
+                throw new Exception("Error occurred.", ex);
             }
         }
 
@@ -59,10 +56,10 @@ namespace TourPlannerSemesterProjekt.Business
                 }
                 return allTours;
             }
-            catch (NpgsqlException ex)
+            catch (Exception ex)
             {
-                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
-                throw new NpgsqlException("Error in database occurred.", ex);
+                logger.Fatal("Tour-Logs could not be loaded. Exception: " + ex);
+                throw new Exception("Error occurred.", ex);
             }
         }
 
@@ -82,12 +79,13 @@ namespace TourPlannerSemesterProjekt.Business
 
             try
             {
+                logger.Debug("New Tour: '" + newtour.name + "' created.");
                 _dBAccess.AddNewTour(newtour);
             }
-            catch (NpgsqlException ex)
+            catch (Exception ex)
             {
-                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
-                throw new NpgsqlException("Error in database occurred.", ex);
+                logger.Fatal("New Tour: '" + newtour.name + "' could not be added. Exception: " + ex);
+                throw new Exception("Error occurred.", ex);
             }
         }
 
@@ -113,7 +111,7 @@ namespace TourPlannerSemesterProjekt.Business
         public bool CheckTour(TourObjekt newtour)
         {
             MapQuestService _mapQuestService = new MapQuestService(newtour.from, newtour.to);
-            if(_mapQuestService.CheckRoute())
+            if (_mapQuestService.CheckRoute())
             {
                 return true;
             }
@@ -131,11 +129,12 @@ namespace TourPlannerSemesterProjekt.Business
                 newtour.caloriefuel = GetFuelorCalories(newtour);
 
                 _dBAccess.EditTour(newtour);
+                logger.Debug("Tour: '" + newtour.name + "' edited.");
             }
-            catch (NpgsqlException ex)
+            catch (Exception ex)
             {
-                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
-                throw new NpgsqlException("Error in database occurred.", ex);
+                logger.Fatal("Tour: '" + newtour.name + "' could not be edited. Exception: " + ex);
+                throw new Exception("Error occurred.", ex);
             }
         }
 
@@ -146,12 +145,12 @@ namespace TourPlannerSemesterProjekt.Business
             try
             {
                 _dBAccess.DeleteTour(tour);
-                //fileAcess.DeleteFile(tour.imagePath);
+                logger.Debug("Tour: '" + tour.name + "' deleted.");
             }
-            catch (NpgsqlException ex)
+            catch (Exception ex)
             {
-                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
-                throw new NpgsqlException("Error in database occurred.", ex);
+                logger.Fatal("Tour: '" + tour.name + "' could not be deleted. Exception: " + ex);
+                throw new Exception("Error occurred.", ex);
             }
         }
 
@@ -161,11 +160,12 @@ namespace TourPlannerSemesterProjekt.Business
             try
             {
                 _dBAccess.AddNewTourLog(newtourlog);
+                logger.Debug("Tour-Log: '" + newtourlog.l_date.ToShortDateString() + "' deleted.");
             }
-            catch (NpgsqlException ex)
+            catch (Exception ex)
             {
-                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
-                throw new NpgsqlException("Error in database occurred.", ex);
+                logger.Fatal("Tour-Log: '" + newtourlog.l_date.ToShortDateString() + "' could not be added. Exception: " + ex);
+                throw new Exception("Error occurred.", ex);
             }
         }
 
@@ -174,11 +174,12 @@ namespace TourPlannerSemesterProjekt.Business
             try
             {
                 _dBAccess.EditTourLog(newtourlog);
+                logger.Debug("Tour-Log: '" + newtourlog.l_date.ToShortDateString() + "' edited.");
             }
-            catch (NpgsqlException ex)
+            catch (Exception ex)
             {
-                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
-                throw new NpgsqlException("Error in database occurred.", ex);
+                logger.Fatal("Tour-Log: '" + newtourlog.l_date.ToShortDateString() + "' could not be edited. Exception: " + ex);
+                throw new Exception("Error occurred.", ex);
             }
         }
 
@@ -189,41 +190,37 @@ namespace TourPlannerSemesterProjekt.Business
             try
             {
                 _dBAccess.DeleteTourLog(newtourlog);
+                logger.Debug("Tour-Log: '" + newtourlog.l_date.ToShortDateString() + "' deleted.");
             }
-            catch (NpgsqlException ex)
+            catch (Exception ex)
             {
-                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
-                throw new NpgsqlException("Error in database occurred.", ex);
+                logger.Fatal("Tour-Log: '" + newtourlog.l_date.ToShortDateString() + "' could not be deleted. Exception: " + ex);
+                throw new Exception("Error occurred.", ex);
             }
         }
 
-        public void GeneratePdf(TourObjekt newtour)
+        public void GeneratePdf(TourObjekt tour)
         {
             PDFGeneratorService _pdfGeneratorService = new PDFGeneratorService();
-            _pdfGeneratorService.printPdf(newtour);
+            _pdfGeneratorService.printPdf(tour);
         }
 
-        //JUST FOR TESTING: needs to be divided up to DAL (FileAccess) and own BL-Class (IO/JSON-Service)
+        public void GenerateSumPdf(List<TourObjekt> tours)
+        {
+            PDFGeneratorService _pdfGeneratorService = new PDFGeneratorService();
+            _pdfGeneratorService.printSumPdf(tours);
+        }
+
         public void ExportTour(TourObjekt tour)
         {
-            using (StreamWriter file = File.CreateText("./tour_export.json"))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Formatting = Formatting.Indented;
-                serializer.Serialize(file, tour);
-            }
+            JSONService _jSONService = new JSONService();
+            _jSONService.ExportTour(tour);
         }
 
-        //JUST FOR TESTING: needs to be divided up to DAL (FileAccess) and own BL-Class (IO/JSON-Service)
         public void ImportTour(string filePath)
         {
-            using (StreamReader file = File.OpenText(filePath))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                TourObjekt? tourImport = (TourObjekt)serializer.Deserialize(file, typeof(TourObjekt));
-
-                _dBAccess.AddNewTour(tourImport);
-            }
+            JSONService _jSONService = new JSONService();
+            _jSONService.ImportTour(filePath);
         }
     }
 }

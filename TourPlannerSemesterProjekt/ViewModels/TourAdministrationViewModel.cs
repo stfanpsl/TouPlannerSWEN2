@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using TourPlannerSemesterProjekt.Models;
-using TourPlannerSemesterProjekt.DataAccess;
+﻿using System.Windows;
+using System.Windows.Input;
 using TourPlannerSemesterProjekt.Business;
 using TourPlannerSemesterProjekt.Logging;
-using System.Windows.Input;
-using System.Windows;
+using TourPlannerSemesterProjekt.Models;
 
 namespace TourPlannerSemesterProjekt.ViewModels
 {
@@ -39,7 +31,6 @@ namespace TourPlannerSemesterProjekt.ViewModels
 
         public ICommand SaveCommand { get; set; }
 
-        //public ICommand CloseWindowCommand { get; set; }
 
         public TourAdministrationViewModel(Window window, MainWindowViewModel mainView)
         {
@@ -47,12 +38,11 @@ namespace TourPlannerSemesterProjekt.ViewModels
             _mainView = mainView;
             _tourservice = TourPlannerFactory.GetInstance();
 
-            //RaisePropertyChanged(nameof(CurrentItem));
 
-            SaveCommand = new RelayCommand(o => {
-                //var newTourItem = CurrentItem;
+            SaveCommand = new RelayCommand(o =>
+            {
                 InsertTour(currentItem);
-            });
+            }, canExecuteSaveCommand);
         }
 
         public TourAdministrationViewModel(Window window, MainWindowViewModel mainView, TourObjekt tour)
@@ -64,11 +54,11 @@ namespace TourPlannerSemesterProjekt.ViewModels
 
             _tourservice = TourPlannerFactory.GetInstance();
 
-            //RaisePropertyChanged(nameof(CurrentItem));
 
-            SaveCommand = new RelayCommand(o => {
+            SaveCommand = new RelayCommand(o =>
+            {
                 UpdateTour(currentItem);
-            });
+            }, canExecuteSaveCommand);
         }
 
         private void InsertTour(TourObjekt newTour)
@@ -91,6 +81,22 @@ namespace TourPlannerSemesterProjekt.ViewModels
             _tourservice.EditTour(newTour);
             _mainView.GetTours();
             _window.Close();
+        }
+
+        private bool canExecuteSaveCommand(object commandParameter)
+        {
+            if (string.IsNullOrEmpty(currentItem.name) ||
+                string.IsNullOrEmpty(currentItem.from) ||
+                string.IsNullOrEmpty(currentItem.to) ||
+                string.IsNullOrEmpty(currentItem.routeInformation) ||
+                string.IsNullOrEmpty(currentItem.tourDescription))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         private void CloseWindow(Window window)

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Configuration;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
 using Npgsql;
+using TourPlannerSemesterProjekt.Logging;
 using TourPlannerSemesterProjekt.Models;
-using System.Data.Common;
-using Microsoft.Extensions.Configuration;
+
 
 namespace TourPlannerSemesterProjekt.DataAccess
 {
@@ -22,7 +16,7 @@ namespace TourPlannerSemesterProjekt.DataAccess
 
         private const string SQL_SEARCH_TOURLOGS = "SELECT * FROM tourlogs WHERE LOWER(\"l_comment\") LIKE LOWER(@nl_comment)";
 
-        private const string SQL_INSERT_TOUR = "INSERT INTO tour (\"name\", \"tourDescription\", \"toAddress\", \"fromAddress\", \"transportType\", \"routeInformation\", \"tourDistance\", \"estimatedArrTime\", \"filePath\", \"caloriefuel\") VALUES (@nname, @ntourDescription, @ntoAddress, @nfromAddress, @ntransportType, @nrouteInformation, @ntourDistance, @nestimatedArrTime, @nfilePath, @ncaloriefuel)";
+        private const string SQL_INSERT_TOUR = "INSERT INTO tour (\"name\", \"tourDescription\", \"toAddress\", \"fromAddress\", \"transportType\", \"routeInformation\", \"tourDistance\", \"estimatedArrTime\", \"filePath\", \"caloriefuel\") VALUES (@nname, @ntourDescription, @ntoAddress, @nfromAddress, @ntransportType, @nrouteInformation, @ntourDistance, @nestimatedArrTime, @nfilePath, @ncaloriefuel) RETURNING id";
 
         private const string SQL_UPDATE_TOUR = "UPDATE tour SET \"name\" = @nname, \"tourDescription\" = @ntourDescription, \"toAddress\" = @ntoAddress, \"fromAddress\" = @nfromAddress, \"transportType\" = @ntransportType, \"routeInformation\" = @nrouteInformation, \"tourDistance\" =@ntourDistance , \"estimatedArrTime\" = @nestimatedArrTime, \"caloriefuel\" = @ncaloriefuel WHERE id = @id";
 
@@ -36,6 +30,8 @@ namespace TourPlannerSemesterProjekt.DataAccess
 
 
         private static Lazy<TourPlannerDBAccess> _instance;
+
+        private static ILoggerWrapper logger = LoggerFactory.GetLogger();
 
         public static TourPlannerDBAccess GetInstance()
         {
@@ -87,7 +83,7 @@ namespace TourPlannerSemesterProjekt.DataAccess
             }
             catch (NpgsqlException ex)
             {
-                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                logger.Fatal("Tours could not be loaded from DB: " + ex);
                 throw new NpgsqlException("Error in database occurred.", ex);
             }
 
@@ -134,7 +130,7 @@ namespace TourPlannerSemesterProjekt.DataAccess
 
             catch (NpgsqlException ex)
             {
-                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                logger.Fatal("Tour-Logs could not be loaded from DB: " + ex);
                 throw new NpgsqlException("Error in database occurred.", ex);
             }
 
@@ -144,14 +140,13 @@ namespace TourPlannerSemesterProjekt.DataAccess
         }
 
 
-        public void AddNewTour(TourObjekt newtour)
+        public int AddNewTour(TourObjekt newtour)
         {
-            //var Tour = new TourObjekt();
 
             var conn = CreateOpenConnection();
 
             using var insertCommand = new NpgsqlCommand(SQL_INSERT_TOUR, conn);
-            
+
 
             try
             {
@@ -170,11 +165,12 @@ namespace TourPlannerSemesterProjekt.DataAccess
 
                 insertCommand.Prepare();
 
-                insertCommand.ExecuteNonQuery();
+                int res = (int)insertCommand.ExecuteScalar();
+                return res;
             }
             catch (NpgsqlException ex)
             {
-                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                logger.Fatal("Tour: '" + newtour.name + "'could not be inserted into DB: " + ex);
                 throw new NpgsqlException("Error in database occurred.", ex);
             }
 
@@ -183,7 +179,6 @@ namespace TourPlannerSemesterProjekt.DataAccess
 
         public void EditTour(TourObjekt newtour)
         {
-            //var Tour = new TourObjekt();
 
             var conn = CreateOpenConnection();
 
@@ -211,7 +206,7 @@ namespace TourPlannerSemesterProjekt.DataAccess
             }
             catch (NpgsqlException ex)
             {
-                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                logger.Fatal("Tour: '" + newtour.name + "'could not be edited in DB: " + ex);
                 throw new NpgsqlException("Error in database occurred.", ex);
             }
 
@@ -221,7 +216,6 @@ namespace TourPlannerSemesterProjekt.DataAccess
 
         public void DeleteTour(TourObjekt newtour)
         {
-            //var Tour = new TourObjekt();
 
             var conn = CreateOpenConnection();
 
@@ -239,7 +233,7 @@ namespace TourPlannerSemesterProjekt.DataAccess
             }
             catch (NpgsqlException ex)
             {
-                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                logger.Fatal("Tour: '" + newtour.name + "'could not be deleted in DB: " + ex);
                 throw new NpgsqlException("Error in database occurred.", ex);
             }
 
@@ -269,7 +263,7 @@ namespace TourPlannerSemesterProjekt.DataAccess
             }
             catch (NpgsqlException ex)
             {
-                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                logger.Fatal("Tour: '" + newtourlog.l_date.ToShortDateString() + "'could not be inserted into DB: " + ex);
                 throw new NpgsqlException("Error in database occurred.", ex);
             }
 
@@ -300,7 +294,7 @@ namespace TourPlannerSemesterProjekt.DataAccess
             }
             catch (NpgsqlException ex)
             {
-                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                logger.Fatal("Tour: '" + newtourlog.l_date.ToShortDateString() + "'could not be edited in DB: " + ex);
                 throw new NpgsqlException("Error in database occurred.", ex);
             }
 
@@ -326,7 +320,7 @@ namespace TourPlannerSemesterProjekt.DataAccess
             }
             catch (NpgsqlException ex)
             {
-                Debug.WriteLine("NpgsqlException Error Message ex.Message: " + ex.Message);
+                logger.Fatal("Tour: '" + newtourlog.l_date.ToShortDateString() + "'could not be deleted in DB: " + ex);
                 throw new NpgsqlException("Error in database occurred.", ex);
             }
 

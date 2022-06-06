@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=local:TourAdministrationViewModel}"
         Title="TourAdministration" Height="600" Width="800">
-    <Grid ShowGridLines="False">
+    <Grid>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />

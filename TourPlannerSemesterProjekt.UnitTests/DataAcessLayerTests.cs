@@ -3,8 +3,6 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TourPlannerSemesterProjekt.Business;
-using TourPlannerSemesterProjekt.Business.Services;
 using TourPlannerSemesterProjekt.DataAccess;
 using TourPlannerSemesterProjekt.Models;
 
@@ -417,14 +415,14 @@ namespace TourPlannerSemesterProjekt.UnitTests
                 };
 
             var deleteItem = new TourLogObjekt()
-                    {
-                        l_comment = "Test 1-2",
-                        l_date = DateTime.Now,
-                        l_difficulty = "Medium",
-                        l_rating = 1,
-                        l_totaltime = "14:00:00",
-                        l_tour = 1
-                    };
+            {
+                l_comment = "Test 1-2",
+                l_date = DateTime.Now,
+                l_difficulty = "Medium",
+                l_rating = 1,
+                l_totaltime = "14:00:00",
+                l_tour = 1
+            };
 
             Mock<ITourPlannerDBAccess> mockDB = new Mock<ITourPlannerDBAccess>();
 

@@ -1,9 +1,8 @@
-﻿using Moq;
-using NUnit.Framework;
-using TourPlannerSemesterProjekt.ViewModels;
-using TourPlannerSemesterProjekt.Models;
+﻿using NUnit.Framework;
 using System;
 using System.Collections.ObjectModel;
+using TourPlannerSemesterProjekt.Models;
+using TourPlannerSemesterProjekt.ViewModels;
 
 namespace TourPlannerSemesterProjekt.UnitTests
 {

@@ -1,16 +1,9 @@
-﻿using System;
-using System.Configuration;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
-using TourPlannerSemesterProjekt.Logging;
+using System.Drawing;
+using System.Net;
 using TourPlannerSemesterProjekt.DataAccess;
-using Microsoft.Extensions.Configuration;
+using TourPlannerSemesterProjekt.Logging;
 
 namespace TourPlannerSemesterProjekt.Business.Services
 {
@@ -41,24 +34,24 @@ namespace TourPlannerSemesterProjekt.Business.Services
         {
             var fromLocationFormatted = fromLocation.Replace(" ", "%");
             var toLocationFormatted = toLocation.Replace(" ", "%");
-            var url = _baseUrl + "/directions/v2/route?key=" 
-                    + _apiKey 
-                    + "&from=" 
+            var url = _baseUrl + "/directions/v2/route?key="
+                    + _apiKey
+                    + "&from="
                     + fromLocationFormatted
-                    + "&to=" 
+                    + "&to="
                     + toLocationFormatted
                     + "&unit=k";
 
-                HttpClient client = new HttpClient();
-                JObject jSonResponse;
-                using (HttpResponseMessage response = client.GetAsync(url).Result)
+            HttpClient client = new HttpClient();
+            JObject jSonResponse;
+            using (HttpResponseMessage response = client.GetAsync(url).Result)
+            {
+                using (HttpContent content = response.Content)
                 {
-                    using (HttpContent content = response.Content)
-                    {
-                        jSonResponse = JObject.Parse(content.ReadAsStringAsync().Result);
-                    }
-                    return jSonResponse;
+                    jSonResponse = JObject.Parse(content.ReadAsStringAsync().Result);
                 }
+                return jSonResponse;
+            }
             return null;
         }
 
@@ -68,15 +61,17 @@ namespace TourPlannerSemesterProjekt.Business.Services
             {
                 if ((string)_routeData["route"]["formattedTime"] == "00:00:00" || (string)_routeData["route"]["routeError"]["errorCode"] == "2")
                 {
+                    logger.Error("Route could not be found for Session ID: " + _routeData["route"]["sessionId"]);
                     return false;
                 }
                 else
                 {
                     return true;
-                }    
+                }
             }
             else
             {
+                logger.Error("Route could not be found for Session ID: " + _routeData["route"]["sessionId"]);
                 return false;
             }
         }
@@ -127,12 +122,13 @@ namespace TourPlannerSemesterProjekt.Business.Services
                             {
                                 //image.Save(fullFilePath, ImageFormat.Jpeg);
                                 savedFilePath = fileAcess.SaveImage(image);
+                                logger.Debug("Image saved under: " + savedFilePath);
                             }
                         }
                     }
                     catch (System.Net.WebException ex)
                     {
-                        logger.Error("Route does not exist!!!");
+                        logger.Error("Image could not be saved.");
                     }
 
                 }

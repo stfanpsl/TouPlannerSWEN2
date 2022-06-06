@@ -1,4 +1,4 @@
-using Moq;
+using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using System;
 using System.IO;
@@ -25,7 +25,7 @@ namespace TourPlannerSemesterProjekt.UnitTests
             testTour.from = "Test";
             testTour.to = "Test";
 
-            Assert.IsFalse(_tourService.CheckTour(testTour)); 
+            Assert.IsFalse(_tourService.CheckTour(testTour));
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace TourPlannerSemesterProjekt.UnitTests
             testTour.to = "Wien";
 
             MapQuestService _mapService = new MapQuestService(testTour.from, testTour.to);
-            testTour.tourDistance = _mapService.GetRouteDistance(); 
+            testTour.tourDistance = _mapService.GetRouteDistance();
 
             testTour.transportType = "By Car";
             Assert.AreEqual(expectedFuelUsage, _tourService.GetFuelorCalories(testTour));
@@ -73,6 +73,10 @@ namespace TourPlannerSemesterProjekt.UnitTests
         [Test]
         public void ExportTest()
         {
+            IConfiguration config = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", false, true)
+            .Build();
+
             var testTour = new TourObjekt
             {
                 name = "Test 1",
@@ -85,37 +89,7 @@ namespace TourPlannerSemesterProjekt.UnitTests
                 tourDistance = 100
             };
 
-            string expectedFilename = "./" + testTour.name + ".json";
-
-            JSONService _jsonService = new JSONService();
-            
-            _jsonService.ExportTour(testTour);
-
-            FileAssert.Exists(expectedFilename);
-
-            //cleanup
-            if (File.Exists(expectedFilename)) { 
-                File.Delete(expectedFilename);
-            }
-        }
-
-
-        /*[Test]
-        public void ImportTest()
-        {
-            var testTour = new TourObjekt
-            {
-                name = "Test 1",
-                tourDescription = "Desc. 1",
-                from = "Wien",
-                to = "Linz",
-                estimatedTime = "10:00:00",
-                routeInformation = "Info 1",
-                transportType = "By Car",
-                tourDistance = 100
-            };
-
-            string expectedFilename = "./" + testTour.name + ".json";
+            string expectedFilename = config["filePath"] + testTour.name + "_" + DateTime.Now.ToShortDateString() + ".json";
 
             JSONService _jsonService = new JSONService();
 
@@ -128,6 +102,7 @@ namespace TourPlannerSemesterProjekt.UnitTests
             {
                 File.Delete(expectedFilename);
             }
-        }*/
+        }
+
     }
 }

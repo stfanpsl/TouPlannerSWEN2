@@ -1,16 +1,18 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using TourPlannerSemesterProjekt.DataAccess;
 using TourPlannerSemesterProjekt.Models;
+using TourPlannerSemesterProjekt.Logging;
 
 namespace TourPlannerSemesterProjekt.Business.Services
 {
     public class JSONService
     {
+        IConfiguration config = new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json", false, true)
+        .Build();
+
+        private static ILoggerWrapper logger = LoggerFactory.GetLogger();
 
         private ITourPlannerDBAccess _dBAccess;
         public JSONService()
@@ -19,18 +21,15 @@ namespace TourPlannerSemesterProjekt.Business.Services
             _dBAccess = repository;
         }
 
-        /*public void OpenFile(string path)
-        {
-
-        }*/
 
         public void ExportTour(TourObjekt tour)
         {
-            using (StreamWriter file = File.CreateText("./" + tour.name +".json"))
+            using (StreamWriter file = File.CreateText(config["filePath"] + tour.name + "_" + DateTime.Now.ToShortDateString() + ".json"))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Formatting = Formatting.Indented;
                 serializer.Serialize(file, tour);
+                logger.Debug("Tour Exported: '" + tour.name);
             }
         }
 
@@ -41,7 +40,14 @@ namespace TourPlannerSemesterProjekt.Business.Services
                 JsonSerializer serializer = new JsonSerializer();
                 TourObjekt? tourImport = (TourObjekt)serializer.Deserialize(file, typeof(TourObjekt));
 
-                _dBAccess.AddNewTour(tourImport);
+                int id = _dBAccess.AddNewTour(tourImport);
+
+                foreach (TourLogObjekt log in tourImport.tourlogs)
+                {
+                    log.l_tour = id;
+                    _dBAccess.AddNewTourLog(log);
+                }
+                logger.Debug("Tour Imported: '" + tourImport.name);
             }
         }
     }

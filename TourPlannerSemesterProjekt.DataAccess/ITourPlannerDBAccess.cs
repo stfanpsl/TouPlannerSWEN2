@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TourPlannerSemesterProjekt.Models;
+﻿using TourPlannerSemesterProjekt.Models;
 
 namespace TourPlannerSemesterProjekt.DataAccess
 {
@@ -14,7 +9,7 @@ namespace TourPlannerSemesterProjekt.DataAccess
 
         public List<TourLogObjekt> GetTourLogs(TourObjekt tour, string searchText = "");
 
-        public void AddNewTour(TourObjekt newtour);
+        public int AddNewTour(TourObjekt newtour);
 
         public void DeleteTour(TourObjekt newtour);
 

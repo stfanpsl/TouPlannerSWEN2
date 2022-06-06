@@ -1,12 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TourPlannerSemesterProjekt.DataAccess
 {
@@ -27,10 +21,6 @@ namespace TourPlannerSemesterProjekt.DataAccess
             return fullFilePath;
         }
 
-        public void SaveJSON()
-        {
-
-        }
 
         public void DeleteFile(string delFilePath)
         {
