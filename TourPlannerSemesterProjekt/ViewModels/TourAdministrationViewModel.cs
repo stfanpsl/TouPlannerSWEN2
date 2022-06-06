@@ -52,12 +52,22 @@ namespace TourPlannerSemesterProjekt.ViewModels
 
             currentItem = tour;
 
+            var initFrom = currentItem.from;
+            var initTo = currentItem.to;
+
             _tourservice = TourPlannerFactory.GetInstance();
 
 
             SaveCommand = new RelayCommand(o =>
             {
-                UpdateTour(currentItem);
+                if(currentItem.from != initFrom || currentItem.to != initTo)
+                {
+                    UpdateTour(currentItem, true);
+                }
+                else
+                {
+                    UpdateTour(currentItem, false);
+                }
             }, canExecuteSaveCommand);
         }
 
@@ -76,11 +86,25 @@ namespace TourPlannerSemesterProjekt.ViewModels
             }
         }
 
-        private void UpdateTour(TourObjekt newTour)
+        private void UpdateTour(TourObjekt newTour, bool newRoute)
         {
-            _tourservice.EditTour(newTour);
-            _mainView.GetTours();
-            _window.Close();
+            if (newRoute) {
+                if (_tourservice.CheckTour(newTour))
+                {
+                    _tourservice.EditTour(newTour, true);
+                    _mainView.GetTours();
+                    _window.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Please check if the 'To' and 'From' fields have been correctly filled in.'", "Route could not be found!");
+                }
+            }
+            else { 
+                _tourservice.EditTour(newTour);
+                _mainView.GetTours();
+                _window.Close();
+            }
         }
 
         private bool canExecuteSaveCommand(object commandParameter)

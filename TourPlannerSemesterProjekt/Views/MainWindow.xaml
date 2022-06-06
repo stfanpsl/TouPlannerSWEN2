@@ -46,16 +46,17 @@
         <Button Command="{Binding AddCommand}"  Content="+" Grid.Column="0" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center" Width="56" Background="DodgerBlue" BorderBrush="DarkBlue"/>
         <Button Command="{Binding DeleteCommand}" Content="-" Grid.Column="0" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Right" Width="56" Background="DodgerBlue" BorderBrush="DarkBlue"/>
         <Label Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="1" Content="{Binding SelectedItem.name, ElementName=TourListBox}" Height="30"/>
-        <StackPanel Margin="5" Orientation="Vertical" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="1">
+        <ScrollViewer Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="5" Orientation="Vertical">
             <TextBlock Margin="5" Text="{Binding SelectedItem.tourDescription, StringFormat='Description: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.from, StringFormat='Start: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.to, StringFormat='Destination: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.transportType, StringFormat='Transport-type: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.tourDistance, StringFormat='Distance: {0} km', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.estimatedTime, StringFormat='ETA: {0}', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
-            <TextBlock Margin="5" Text="{Binding SelectedItem.caloriefuel, StringFormat='Burned fuel/calories: {0} L/cal', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
-
-        </StackPanel>
+                <TextBlock Margin="5" Text="{Binding SelectedItem.caloriefuel, StringFormat='Burned fuel/calories: {0} L/cal', ElementName=TourListBox}" TextWrapping="Wrap" Background="White"/>
+            </StackPanel>
+        </ScrollViewer>
         <StackPanel Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="1" HorizontalAlignment="Center" Height="auto" Orientation="Horizontal" VerticalAlignment="Top" Visibility="{Binding CurrentTour, TargetNullValue=Collapsed}">
 
             <TextBlock Margin="5" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3">Tour-Logs</TextBlock>
@@ -101,12 +102,14 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </StackPanel>
-        <StackPanel Margin="5" Orientation="Vertical" Grid.Column="2" Grid.Row="6" Grid.ColumnSpan="2">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="2" Grid.Row="6" Grid.ColumnSpan="2">
+        <StackPanel Margin="5" Orientation="Vertical" >
             <TextBlock Margin="5" Text="{Binding SelectedItem.l_comment, StringFormat='Comment: {0}', ElementName=TourLogListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.l_difficulty, StringFormat='Difficulty: {0}', ElementName=TourLogListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.l_totaltime, StringFormat='Total Time: {0}', ElementName=TourLogListBox}" TextWrapping="Wrap" Background="White"/>
             <TextBlock Margin="5" Text="{Binding SelectedItem.l_rating, StringFormat='Rating: {0}', ElementName=TourLogListBox}" TextWrapping="Wrap" Background="White"/>
         </StackPanel>
+        </ScrollViewer>
         <Button Command="{Binding SearchCommand}" HorizontalAlignment="Left" Height="25" Width="25" Grid.Column="3" Grid.Row="2">
             <Image Source="/img/SearchIcon.png" />
         </Button>

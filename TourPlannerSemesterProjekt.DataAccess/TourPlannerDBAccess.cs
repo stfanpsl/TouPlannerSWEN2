@@ -18,7 +18,7 @@ namespace TourPlannerSemesterProjekt.DataAccess
 
         private const string SQL_INSERT_TOUR = "INSERT INTO tour (\"name\", \"tourDescription\", \"toAddress\", \"fromAddress\", \"transportType\", \"routeInformation\", \"tourDistance\", \"estimatedArrTime\", \"filePath\", \"caloriefuel\") VALUES (@nname, @ntourDescription, @ntoAddress, @nfromAddress, @ntransportType, @nrouteInformation, @ntourDistance, @nestimatedArrTime, @nfilePath, @ncaloriefuel) RETURNING id";
 
-        private const string SQL_UPDATE_TOUR = "UPDATE tour SET \"name\" = @nname, \"tourDescription\" = @ntourDescription, \"toAddress\" = @ntoAddress, \"fromAddress\" = @nfromAddress, \"transportType\" = @ntransportType, \"routeInformation\" = @nrouteInformation, \"tourDistance\" =@ntourDistance , \"estimatedArrTime\" = @nestimatedArrTime, \"caloriefuel\" = @ncaloriefuel WHERE id = @id";
+        private const string SQL_UPDATE_TOUR = "UPDATE tour SET \"name\" = @nname, \"tourDescription\" = @ntourDescription, \"toAddress\" = @ntoAddress, \"fromAddress\" = @nfromAddress, \"transportType\" = @ntransportType, \"routeInformation\" = @nrouteInformation, \"tourDistance\" =@ntourDistance , \"estimatedArrTime\" = @nestimatedArrTime, \"caloriefuel\" = @ncaloriefuel, \"filePath\" = @nfilePath WHERE id = @id";
 
         private const string SQL_DELETE_TOUR = "DELETE FROM tour WHERE \"id\" = @id";
 
@@ -197,6 +197,7 @@ namespace TourPlannerSemesterProjekt.DataAccess
                 updateCommand.Parameters.AddWithValue("ntourDistance", newtour.tourDistance);
                 updateCommand.Parameters.AddWithValue("nestimatedArrTime", newtour.estimatedTime);
                 updateCommand.Parameters.AddWithValue("ncaloriefuel", newtour.caloriefuel);
+                updateCommand.Parameters.AddWithValue("nfilePath", newtour.imagePath);
 
                 updateCommand.Parameters.AddWithValue("id", newtour.id);
 

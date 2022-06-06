@@ -14,7 +14,7 @@ namespace TourPlannerSemesterProjekt.Business
 
         public void DeleteTour(TourObjekt tour);
 
-        public void EditTour(TourObjekt newtour);
+        public void EditTour(TourObjekt newtour, bool newRoute = false);
 
         public void AddNewTourLog(TourLogObjekt newtourlog);
 

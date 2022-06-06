@@ -121,11 +121,22 @@ namespace TourPlannerSemesterProjekt.Business
             }
         }
 
-        public void EditTour(TourObjekt newtour)
+        public void EditTour(TourObjekt newtour, bool newRoute = false)
         {
             try
             {
+                if (newRoute)
+                {
+                    MapQuestService _mapQuestService = new MapQuestService(newtour.from, newtour.to);
+                    string imagePath = _mapQuestService.GetImage();
+                    double tourDistance = _mapQuestService.GetRouteDistance();
+                    string arrivalTime = _mapQuestService.GetArrivalTime();
 
+
+                    newtour.tourDistance = Math.Round(tourDistance, 2);
+                    newtour.estimatedTime = arrivalTime;
+                    newtour.imagePath = imagePath;
+                }
                 newtour.caloriefuel = GetFuelorCalories(newtour);
 
                 _dBAccess.EditTour(newtour);

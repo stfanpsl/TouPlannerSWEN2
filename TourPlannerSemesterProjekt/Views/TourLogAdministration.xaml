@@ -35,7 +35,7 @@
         <Label FontWeight="Bold" Grid.Column="1" Grid.Row="1" Background="WhiteSmoke"  Grid.ColumnSpan="2">Datetime</Label>
         <DatePicker SelectedDate="{Binding CurrentItem.l_date}" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"  Width="600" ></DatePicker>
         <Label FontWeight="Bold" Grid.Column="1" Grid.Row="3" Background="WhiteSmoke"  Grid.ColumnSpan="2">Comment</Label>
-        <TextBox Text="{Binding CurrentItem.l_comment,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" TextWrapping="NoWrap"></TextBox>
+        <TextBox Text="{Binding CurrentItem.l_comment,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Width="600" TextWrapping="NoWrap"></TextBox>
         <Label FontWeight="Bold" Grid.Column="1" Grid.Row="5" Background="WhiteSmoke"  Grid.ColumnSpan="2">Difficulty</Label>
         <ComboBox SelectedValue="{Binding CurrentItem.l_difficulty}" SelectedValuePath="Content" VerticalAlignment="Center" Height="45"  Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2">
             <ComboBoxItem Content="Easy" />
